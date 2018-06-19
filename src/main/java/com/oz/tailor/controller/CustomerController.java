@@ -36,42 +36,23 @@ public class CustomerController {
         return new ResponseEntity<List<Customer>>(customers, HttpStatus.OK);
 	}
 	
-	@PostMapping("/addCustomer")
-    public ResponseEntity<?> createUser(@RequestBody Customer customer, UriComponentsBuilder ucBuilder) {
+	@GetMapping("/getCustomer/{id}")
+	public ResponseEntity<Customer> getCustomers(@PathVariable("id") long id){
+		Customer customer =  customerRepository.findById(id).get();
+        return new ResponseEntity<Customer>(customer, HttpStatus.OK);
+	}
+	
+	@PostMapping("/saveCustomer")
+    public ResponseEntity<?> createUser(@RequestBody Customer customer) {
 
         customerRepository.save(customer);
  
-        return new ResponseEntity<String>("success", HttpStatus.CREATED);
-    }
-	
-	 // ------------------- Update a User ------------------------------------------------
-	 
-    @PutMapping("/updateCustomer")
-    public ResponseEntity<?> updateUser(@PathVariable("id") long id, @RequestBody Customer customer) {
- 
-        Customer currentCustomer = customerRepository.findById(id).get();
- 
-        if (currentCustomer == null) {
-            
-            return new ResponseEntity("Kayıt Bulunamadı", HttpStatus.NOT_FOUND);
-        }
-        
-        currentCustomer.setCompanyName(customer.getCompanyName());
-        currentCustomer.setCustomerName(customer.getCustomerName());
-        currentCustomer.setCustomerSurname(customer.getCustomerSurname());
-        currentCustomer.setFootSize(customer.getFootSize());
-        currentCustomer.setHeight(customer.getHeight());
-        currentCustomer.setWeight(customer.getWeight());
-        currentCustomer.setMail(customer.getMail());
-        currentCustomer.setPhoneNumber(customer.getPhoneNumber());
-        
-        customerRepository.save(currentCustomer);
-        return new ResponseEntity<Customer>(currentCustomer, HttpStatus.OK);
+        return new ResponseEntity<String>("{\"result\":\"success\"}", HttpStatus.CREATED);
     }
  
     // ------------------- Delete a User-----------------------------------------
  
-    @DeleteMapping("/deleteCustomer")
+	@GetMapping("/deleteCustomer/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable("id") long id) {
  
         Customer customer = customerRepository.findById(id).get();

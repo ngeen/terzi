@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout">
+<head>
+<title>Hello world page</title>
+</head>
+<body>
+
+	<th:block layout:fragment="page_header">
+		Müşteri Kayıt Formu
+	</th:block>
+
+	<th:block layout:fragment="breadcrumb">
+		<li class="breadcrumb-item">Müşteri Kayıt</li>
+	</th:block>
+
+	<div layout:fragment="page_content">
+		<div class="card card-primary">
+			<div class="card-header">
+				<h3 class="card-title">Müşteri Kayıt</h3>
+			</div>
+			<!-- /.card-header -->
+			<!-- form start -->
+			<form role="form" th:object="${customer}">
+				<div class="card-body">
+					<div class="form-group">
+						<label for="id">Müşteri Numarası</label> <input type="text"
+							class="form-control" disabled="disabled" id="id" name="id"
+							placeholder="Müşteri Numarası" th:field="*{id}">
+					</div>
+					<div class="form-group">
+						<label for="customerName">Müşteri İsmi</label> <input type="text"
+							class="form-control" id="customerName" name="customerName"
+							placeholder="Müşteri İsmi" th:field="*{customerName}">
+					</div>
+					<div class="form-group">
+						<label for="customerSurname">Müşteri Soyadı</label> <input
+							type="text" class="form-control" id="customerSurname"
+							name="customerSurname" placeholder="Müşteri Soyadı"
+							th:field="*{customerSurname}">
+					</div>
+					<div class="form-group">
+						<label for="companyName">Şirket Adı</label> <input type="text"
+							class="form-control" id="companyName" name="companyName"
+							placeholder="Şirket Adı" th:field="*{companyName}">
+					</div>
+					<div class="form-group">
+						<label for="phoneNumber">Telefon Numarası</label> <input
+							type="tel" class="form-control" id="phoneNumber"
+							name="phoneNumber" placeholder="Telefon Numarası"
+							th:field="*{phoneNumber}">
+					</div>
+					<div class="form-group">
+						<label for="email">Mail Adresi</label> <input type="mail"
+							class="form-control" id="mail" name="mail"
+							placeholder="Mail Adresi" th:field="*{mail}">
+					</div>
+					<div class="form-group">
+						<label for="weight">Kilosu</label> <input type="number"
+							class="form-control" id="weight" name="weight"
+							placeholder="Kilosu" th:field="*{weight}">
+					</div>
+					<div class="form-group">
+						<label for="height">Boyu</label> <input type="number"
+							class="form-control" id="height" name="height" placeholder="Boyu"
+							th:field="*{height}">
+					</div>
+
+					<div class="form-group">
+						<label for="footSize">Ayak Numarası</label> <input type="number"
+							class="form-control" id="footSize" name="footSize"
+							placeholder="Ayak Numarası" th:field="*{footSize}">
+					</div>
+				</div>
+				<!-- /.card-body -->
+
+				<div class="card-footer">
+					<button type="submit" class="btn btn-primary">Submit</button>
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<th:block layout:fragment="script">
+		<!-- page script -->
+		<script>
+			(function($) {
+				$.fn.serializeFormJSON = function() {
+
+					var o = {};
+					var a = this.serializeArray();
+					$.each(a, function() {
+						if (o[this.name]) {
+							if (!o[this.name].push) {
+								o[this.name] = [ o[this.name] ];
+							}
+							o[this.name].push(this.value || '');
+						} else {
+							o[this.name] = this.value || '';
+						}
+					});
+					return o;
+				};
+			})(jQuery);
+
+			$('form').submit(function(e) {
+				e.preventDefault();
+				var data = $(this).serializeFormJSON();
+				console.log(data);
+
+				$.ajax({
+					url : '/saveCustomer',
+					dataType : 'json',
+					type : 'post',
+					contentType : 'application/json',
+					data : JSON.stringify(data),
+					processData : false,
+					success : function(data, textStatus, jQxhr) {
+						alert("kayıt başarılı");
+					},
+					error : function(jqXhr, textStatus, errorThrown) {
+						console.log(errorThrown);
+					}
+				});
+
+			});
+		</script>
+	</th:block>
+</body>

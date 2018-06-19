@@ -5,21 +5,11 @@
 <head>
 <title>Müşteri İşlemleri</title>
 <th:block loyout:fragment="header">
-	<!-- Font Awesome -->
-	<link rel="stylesheet"
-		href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
-	<!-- Ionicons -->
-	<link rel="stylesheet"
-		href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
 	<!-- DataTables -->
 	<link rel="stylesheet"
 		href="/plugins/datatables/dataTables.bootstrap4.css">
-	<!-- Theme style -->
-	<link rel="stylesheet" href="/dist/css/adminlte.min.css">
-	<!-- Google Font: Source Sans Pro -->
-	<link
-		href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700"
-		rel="stylesheet">
+	<link rel="stylesheet" type="text/css"
+		href="/plugins/datatables/extensions/Responsive/css/dataTables.responsive.css">
 </th:block>
 </head>
 <body>
@@ -33,8 +23,10 @@
 	</th:block>
 
 	<div layout:fragment="page_content">
-		<table id="example" class="table table-bordered table-hover dataTable"
-			role="grid" aria-describedby="example_info">
+		<button class="btn btn-block btn-success btn-lg" onclick="window.location.href='/customer'">Yeni Müşteri</button> <br />
+		<table id="example"
+			class="table table-striped table-hover dt-responsive display"
+			cellspacing="0" width="100%">
 			<thead>
 				<tr>
 					<th>Numarası</th>
@@ -46,6 +38,7 @@
 					<th>Kilo</th>
 					<th>Boy</th>
 					<th>Ayak numarası</th>
+					<th>İşlem</th>
 				</tr>
 			</thead>
 			<tfoot>
@@ -59,37 +52,44 @@
 					<th>Kilo</th>
 					<th>Boy</th>
 					<th>Ayak numarası</th>
+					<th>İşlem</th>
 				</tr>
 			</tfoot>
 		</table>
 	</div>
 	<th:block layout:fragment="script">
-		<!-- jQuery -->
-		<script src="/plugins/jquery/jquery.min.js"></script>
-		<!-- Bootstrap 4 -->
-		<script src="/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 		<!-- DataTables -->
 		<script src="/plugins/datatables/jquery.dataTables.js"></script>
 		<script src="/plugins/datatables/dataTables.bootstrap4.js"></script>
-		<!-- SlimScroll -->
-		<script src="/plugins/slimScroll/jquery.slimscroll.min.js"></script>
-		<!-- FastClick -->
-		<script src="/plugins/fastclick/fastclick.js"></script>
-		<!-- AdminLTE App -->
-		<script src="/dist/js/adminlte.min.js"></script>
-		<!-- AdminLTE for demo purposes -->
-		<script src="/dist/js/demo.js"></script>
+		<script type="text/javascript" language="javascript"
+			src="/plugins/datatables/extensions/Responsive/js/dataTables.responsive.js"></script>
 		<!-- page script -->
 		<script>
 
 		$(document).ready( function () {
 			$('#example').DataTable( {
-		        "serverSide": true,
+				"searching": false,
 		        "ajax": {
 		            "url": "/listCustomers",
-		            "method" : "GET"
-		           }   
-			});
+		            "dataSrc": ""
+		        },
+		        "columns": [
+		            { "data": "id" },
+		            { "data": "customerName" },
+		            { "data": "customerSurname" },
+		            { "data": "companyName" },
+		            { "data": "phoneNumber" },
+		            { "data": "mail" },
+		            { "data": "weight" },
+		            { "data": "height" },
+		            { "data": "footSize" },
+		            { 
+		            	"data": null,
+		                "defaultContent": "<div class=\"btn-group\"><button class=\"btn btn-warning\">Düzenle</button> <button class=\"btn btn-danger\">Sil</button></div>"
+		               }
+		        ]
+		        
+		    } );
 		});
 		</script>
 	</th:block>
