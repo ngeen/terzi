@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout">
+<head>
+<title>Müşteri İşlemleri</title>
+<th:block loyout:fragment="header">
+	<!-- Font Awesome -->
+	<link rel="stylesheet"
+		href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+	<!-- Ionicons -->
+	<link rel="stylesheet"
+		href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+	<!-- DataTables -->
+	<link rel="stylesheet"
+		href="/plugins/datatables/dataTables.bootstrap4.css">
+	<!-- Theme style -->
+	<link rel="stylesheet" href="/dist/css/adminlte.min.css">
+	<!-- Google Font: Source Sans Pro -->
+	<link
+		href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700"
+		rel="stylesheet">
+</th:block>
+</head>
+<body>
+
+	<th:block layout:fragment="page_header">
+		Müşteri Listesi
+	</th:block>
+
+	<th:block layout:fragment="breadcrumb">
+		<li class="breadcrumb-item">Müşteri İşlemleri</li>
+	</th:block>
+
+	<div layout:fragment="page_content">
+		<table id="example" class="table table-bordered table-hover dataTable"
+			role="grid" aria-describedby="example_info">
+			<thead>
+				<tr>
+					<th>Numarası</th>
+					<th>Adı</th>
+					<th>Soyadı</th>
+					<th>Şirket Adı</th>
+					<th>Telefon Numarası</th>
+					<th>E-Mail</th>
+					<th>Kilo</th>
+					<th>Boy</th>
+					<th>Ayak numarası</th>
+				</tr>
+			</thead>
+			<tfoot>
+				<tr>
+					<th>Numarası</th>
+					<th>Adı</th>
+					<th>Soyadı</th>
+					<th>Şirket Adı</th>
+					<th>Telefon Numarası</th>
+					<th>E-Mail</th>
+					<th>Kilo</th>
+					<th>Boy</th>
+					<th>Ayak numarası</th>
+				</tr>
+			</tfoot>
+		</table>
+	</div>
+	<th:block layout:fragment="script">
+		<!-- jQuery -->
+		<script src="/plugins/jquery/jquery.min.js"></script>
+		<!-- Bootstrap 4 -->
+		<script src="/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+		<!-- DataTables -->
+		<script src="/plugins/datatables/jquery.dataTables.js"></script>
+		<script src="/plugins/datatables/dataTables.bootstrap4.js"></script>
+		<!-- SlimScroll -->
+		<script src="/plugins/slimScroll/jquery.slimscroll.min.js"></script>
+		<!-- FastClick -->
+		<script src="/plugins/fastclick/fastclick.js"></script>
+		<!-- AdminLTE App -->
+		<script src="/dist/js/adminlte.min.js"></script>
+		<!-- AdminLTE for demo purposes -->
+		<script src="/dist/js/demo.js"></script>
+		<!-- page script -->
+		<script>
+
+		$(document).ready( function () {
+			$('#example').DataTable( {
+		        "serverSide": true,
+		        "ajax": {
+		            "url": "/listCustomers",
+		            "method" : "GET"
+		           }   
+			});
+		});
+		</script>
+	</th:block>
+</body>
+</html>
