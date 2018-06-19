@@ -15,43 +15,27 @@
 <body>
 
 	<th:block layout:fragment="page_header">
-		Müşteri Listesi
+		Kumaş Listesi
 	</th:block>
 
 	<th:block layout:fragment="breadcrumb">
-		<li class="breadcrumb-item">Müşteri İşlemleri</li>
+		<li class="breadcrumb-item">Kumaş İşlemleri</li>
 	</th:block>
 
 	<div layout:fragment="page_content">
-		<button class="btn btn-block btn-success btn-lg" onclick="window.location.href='/customer'">Yeni Müşteri</button> <br />
+		<button class="btn btn-block btn-success btn-lg" onclick="window.location.href='/fabric'">Yeni Kumaş</button> <br />
 		<table id="example"
 			class="table table-striped table-hover dt-responsive display"
 			cellspacing="0" width="100%">
 			<thead>
 				<tr>
-					<th>Numarası</th>
-					<th>Adı</th>
-					<th>Soyadı</th>
-					<th>Şirket Adı</th>
-					<th>Telefon Numarası</th>
-					<th>E-Mail</th>
-					<th>Kilo</th>
-					<th>Boy</th>
-					<th>Ayak numarası</th>
+					<th>Markası</th>
 					<th>İşlem</th>
 				</tr>
 			</thead>
 			<tfoot>
 				<tr>
-					<th>Numarası</th>
-					<th>Adı</th>
-					<th>Soyadı</th>
-					<th>Şirket Adı</th>
-					<th>Telefon Numarası</th>
-					<th>E-Mail</th>
-					<th>Kilo</th>
-					<th>Boy</th>
-					<th>Ayak numarası</th>
+					<th>Markası</th>
 					<th>İşlem</th>
 				</tr>
 			</tfoot>
@@ -70,19 +54,11 @@
 			var table = $('#example').DataTable( {
 				"searching": false,
 		        "ajax": {
-		            "url": "/listCustomers",
+		            "url": "/listFabrics",
 		            "dataSrc": ""
 		        },
 		        "columns": [
-		            { "data": "id" },
-		            { "data": "customerName" },
-		            { "data": "customerSurname" },
-		            { "data": "companyName" },
-		            { "data": "phoneNumber" },
-		            { "data": "mail" },
-		            { "data": "weight" },
-		            { "data": "height" },
-		            { "data": "footSize" },
+		            { "data": "name" },
 		            { 
 		            	"data": null,
 		                "defaultContent": "<div class=\"btn-group\"><button id=\"updateBtn\" class=\"btn btn-warning\">Düzenle</button> <button id=\"deleteBtn\" class=\"btn btn-danger\">Sil</button></div>"
@@ -95,17 +71,17 @@
 		        var data = table.row( $(this).parents('tr') ).data();
 		        var id = data["id"];
 		        if($(this).attr('id') === "updateBtn"){
-		        	window.location.href='/customer/'+id;
+		        	window.location.href='/fabric/'+id;
 		        } else if ($(this).attr('id') === "deleteBtn"){
 		        	
 		        	$.ajax({
-						url : '/deleteCustomer/'+id,
+						url : '/deleteFabric/'+id,
 						dataType : 'json',
 						type : 'GET',
 						contentType : 'application/json',
 						processData : false,
 						success : function(data, textStatus, jQxhr) {
-							window.location.href='/customers';
+							window.location.href='/fabrics';
 						},
 						error : function(jqXhr, textStatus, errorThrown) {
 							console.log(errorThrown);

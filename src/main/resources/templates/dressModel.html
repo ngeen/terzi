@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout">
+<head>
+<title>Hello world page</title>
+</head>
+<body>
+
+	<th:block layout:fragment="page_header">
+		Model Kayıt Formu
+	</th:block>
+
+	<th:block layout:fragment="breadcrumb">
+		<li class="breadcrumb-item">Model Kayıt</li>
+	</th:block>
+
+	<div layout:fragment="page_content">
+		<div class="card card-primary">
+			<div class="card-header">
+				<h3 class="card-title">Model Kayıt</h3>
+			</div>
+			<!-- /.card-header -->
+			<!-- form start -->
+			<form role="form" th:object="${dressModel}">
+				<div class="card-body">
+
+					<input type="hidden" id="id" name="id" th:field="*{id}">
+
+					<div class="form-group">
+						<label>Elbise Tipi</label> <select id="dressTypeId" name="dressTypeId"
+							th:with="dressType=*{dressType}" class="form-control">
+							<option disabled="disabled">Seçiniz</option>
+							<option th:each="dresstype2 : ${dressTypeRepository}" th:text="${dresstype2.name}"
+								th:value="${dresstype2.id}"  th:selected="${dressType.id == dresstype2.id}"/>
+						</select>
+					</div>
+					<div class="form-group">
+						<label for="dressModel">Model</label> <input type="text"
+							class="form-control" id="dressModel" name="dressModel"
+							placeholder="Model" th:field="*{dressModel}">
+					</div>
+				</div>
+				<!-- /.card-body -->
+
+				<div class="card-footer">
+					<button type="submit" class="btn btn-primary">Submit</button>
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<th:block layout:fragment="script">
+		<!-- page script -->
+		<script>
+			(function($) {
+				$.fn.serializeFormJSON = function() {
+
+					var o = {};
+					var a = this.serializeArray();
+					$.each(a, function() {
+						if (o[this.name]) {
+							if (!o[this.name].push) {
+								o[this.name] = [ o[this.name] ];
+							}
+							o[this.name].push(this.value || '');
+						} else {
+							o[this.name] = this.value || '';
+						}
+					});
+					return o;
+				};
+			})(jQuery);
+
+			$('form').submit(function(e) {
+				e.preventDefault();
+				var data = $(this).serializeFormJSON();
+				console.log(data);
+				var url = "/saveDressModel/"+data["id"]+"/"+data["dressTypeId"]+"/"+data["dressModel"];
+
+				$.ajax({
+					url : url,
+					type : 'GET',
+					success : function(data, textStatus, jQxhr) {
+						window.location.href='/dressModels';
+					},
+					error : function(jqXhr, textStatus, errorThrown) {
+						console.log(errorThrown);
+					}
+				});
+
+			});
+		</script>
+	</th:block>
+</body>

@@ -58,9 +58,9 @@ public class CustomerController {
         Customer customer = customerRepository.findById(id).get();
         if (customer == null) {
             
-            return new ResponseEntity("Kayıt Bulunamadı", HttpStatus.NOT_FOUND);
+        	return new ResponseEntity<String>("{\"result\":\"Kayıt Bulunamadı\"}", HttpStatus.NOT_FOUND);
         }
         customerRepository.deleteById(id);
-        return new ResponseEntity<Customer>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<String>("{\"result\":\"success\"}", HttpStatus.CREATED);
     }
 }
