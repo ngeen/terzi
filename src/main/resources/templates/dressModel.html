@@ -30,9 +30,9 @@
 					<div class="form-group">
 						<label>Elbise Tipi</label> <select id="dressTypeId" name="dressTypeId"
 							th:with="dressType=*{dressType}" class="form-control">
-							<option disabled="disabled">Seçiniz</option>
+							<!--option disabled="disabled" th:selected="${dressType == null}>Seçiniz</option-->
 							<option th:each="dresstype2 : ${dressTypeRepository}" th:text="${dresstype2.name}"
-								th:value="${dresstype2.id}"  th:selected="${dressType.id == dresstype2.id}"/>
+								th:value="${dresstype2.id}"  th:selected="${dressType != null && dressType.id == dresstype2.id}"/>
 						</select>
 					</div>
 					<div class="form-group">
@@ -44,7 +44,7 @@
 				<!-- /.card-body -->
 
 				<div class="card-footer">
-					<button type="submit" class="btn btn-primary">Submit</button>
+					<button type="submit" class="btn btn-primary">Kaydet</button>
 				</div>
 			</form>
 		</div>

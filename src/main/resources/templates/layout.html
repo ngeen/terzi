@@ -66,19 +66,26 @@
 						data-widget="treeview" role="menu" data-accordion="false">
 						<!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
-
-						<li class="nav-item"><a href="/customers" class="nav-link">
-								<i class="nav-icon fa fa-users" aria-hidden="true"></i>
-								<p>Müşteri İşlemleri</p>
-						</a></li>
-						<li class="nav-item"><a href="/dressModels" class="nav-link">
-								<i class="nav-icon fa fa-cube"></i>
-								<p>Model İşlemleri</p>
-						</a></li>
-						<li class="nav-item"><a href="/fabrics" class="nav-link">
-								<i class="nav-icon fa fa-flag-o"></i>
-								<p>Kumaş İşlemleri</p>
-						</a></li>
+						<li class="nav-item has-treeview"><a href="#"
+							class="nav-link active"> <i class="nav-icon fa fa-pencil"></i>
+								<p>
+									Tanımlamalar <i class="right fa fa-angle-left"></i>
+								</p>
+						</a>
+							<ul class="nav nav-treeview">
+								<li class="nav-item"><a href="/customers" class="nav-link">
+										<i class="fa fa-users nav-icon" aria-hidden="true"></i>
+										<p>Müşteri İşlemleri</p>
+								</a></li>
+								<li class="nav-item"><a href="/dressModels"
+									class="nav-link"> <i class="fa fa-cube nav-icon"></i>
+										<p>Model İşlemleri</p>
+								</a></li>
+								<li class="nav-item"><a href="/fabrics" class="nav-link">
+										<i class="nav-icon fa fa-flag-o"></i>
+										<p>Kumaş İşlemleri</p>
+								</a></li>
+							</ul></li>
 						<li class="nav-item"><a href="/orders" class="nav-link">
 								<i class="nav-icon fa fa-pencil-square-o"></i>
 								<p>Sipariş İşlemleri</p>
@@ -130,9 +137,7 @@
 		</div>
 		<!-- /.content-wrapper -->
 		<footer class="main-footer">
-			<strong><a
-				href="/">Terzi</a>
-			</strong>
+			<strong><a href="/">Terzi</a> </strong>
 			<div class="float-right d-none d-sm-inline-block">
 				<b>Version</b> 1.0.0-alpha
 			</div>
