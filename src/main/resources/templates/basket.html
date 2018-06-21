@@ -53,10 +53,18 @@
 						<label><h1 th:text="${customer}"></h1></label>
 					</div>
 					<div class="col-lg-3 btn-group">
-						<button id="shirtBtn" class="btn btn-primary" th:onclick="'window.location.href = \'' + @{/saveShirt/{id}(id=${basket.id})} + '\''">Gomlek Ekle</button>
-						<button id="waistBtn" class="btn btn-primary">Yelek Ekle</button>
-						<button id="jacketBtn" class="btn btn-primary">Ceket Ekle</button>
-						<button id="pantBtn" class="btn btn-primary">Pantolon Ekle</button>
+						<button id="shirtBtn" class="btn btn-success"
+							th:onclick="'window.location.href = \'' + @{/saveShirt/{id}(id=${basket.id})} + '\''">Gomlek
+							Ekle</button>
+						<button id="waistBtn" class="btn btn-success"
+							th:onclick="'window.location.href = \'' + @{/saveWaist/{id}(id=${basket.id})} + '\''">Yelek
+							Ekle</button>
+						<button id="jacketBtn" class="btn btn-success"
+							th:onclick="'window.location.href = \'' + @{/saveJacket/{id}(id=${basket.id})} + '\''">Ceket
+							Ekle</button>
+						<button id="pantBtn" class="btn btn-success"
+							th:onclick="'window.location.href = \'' + @{/savePant/{id}(id=${basket.id})} + '\''">Pantolon
+							Ekle</button>
 					</div>
 					<table id="example"
 						class="table table-striped table-hover dt-responsive display"
@@ -75,22 +83,40 @@
 						</tfoot>
 					</table>
 
-					<div class="form-group">
-						<label for="name">Prova Tarihi1</label> <input type="text"
-							class="form-control" id="deliveryDate" name="deliveryDate"
-							placeholder="Teslim Tarihi" th:field="*{deliveryDate}">
+					<div class="form-group date">
+						<label for="name">Prova Tarihi1</label>
+						<div class="input-group">
+							<div class="input-group-prepend">
+								<span class="input-group-text"><i class="fa fa-calendar"></i></span>
+							</div>
+							<input type="text" class="form-control" id="fittingDate"
+								name="fittingDate" th:field="*{fittingDate}"
+								data-inputmask="'alias': 'dd/mm/yyyy'" data-mask>
+						</div>
 					</div>
 
-					<div class="form-group">
-						<label for="name">Prova Tarihi2</label> <input type="text"
-							class="form-control" id="deliveryDate" name="deliveryDate"
-							placeholder="Teslim Tarihi" th:field="*{deliveryDate}">
+					<div class="form-group date">
+						<label for="name">Prova Tarihi2</label>
+						<div class="input-group">
+							<div class="input-group-prepend">
+								<span class="input-group-text"><i class="fa fa-calendar"></i></span>
+							</div>
+							<input type="text" class="form-control" id="fittingDate2"
+								name="fittingDate2" th:field="*{fittingDate2}"
+								data-inputmask="'alias': 'dd/mm/yyyy'" data-mask>
+						</div>
 					</div>
 
-					<div class="form-group">
-						<label for="name">Teslim Tarihi</label> <input type="text"
-							class="form-control" id="deliveryDate" name="deliveryDate"
-							placeholder="Teslim Tarihi" th:field="*{deliveryDate}">
+					<div class="form-group date">
+						<label for="name">Teslim Tarihi</label>
+						<div class="input-group">
+							<div class="input-group-prepend">
+								<span class="input-group-text"><i class="fa fa-calendar"></i></span>
+							</div>
+							<input type="text" class="form-control" id="deliveryDate"
+								name="deliveryDate" th:field="*{deliveryDate}"
+								data-inputmask="'alias': 'dd/mm/yyyy'" data-mask>
+						</div>
 					</div>
 
 					<div class="form-group">
@@ -117,11 +143,16 @@
 
 	<th:block layout:fragment="script">
 		<!-- DataTables -->
-		<script src="/plugins/datatables/jquery.dataTables.js"></script>
-		<script src="/plugins/datatables/dataTables.bootstrap4.js"></script>
+		<script th:src="@{/plugins/datatables/jquery.dataTables.js}"></script>
+		<script th:src="@{/plugins/datatables/dataTables.bootstrap4.js}"></script>
 		<script type="text/javascript" language="javascript"
-			src="/plugins/datatables/extensions/Responsive/js/dataTables.responsive.js"></script>
+			th:src="@{/plugins/datatables/extensions/Responsive/js/dataTables.responsive.js}"></script>
 		<script th:src="@{/plugins/select2/select2.full.min.js}"></script>
+		<!-- InputMask -->
+		<script th:src="@{/plugins/input-mask/jquery.inputmask.js}"></script>
+		<script
+			th:src="@{/plugins/input-mask/jquery.inputmask.date.extensions.js}"></script>
+		<script th:src="@{/plugins/input-mask/jquery.inputmask.extensions.js}"></script>
 		<!-- page script -->
 		<script>
 			$(document)
@@ -129,13 +160,18 @@
 							function() {
 								//Initialize Select2 Elements
 								$('.select2').select2();
+								$('#fittingDate, #fittingDate2, #deliveryDate').inputmask('dd/mm/yyyy', {
+									'placeholder' : 'dd/mm/yyyy'
+								})
 
 								var table = $('#example')
 										.DataTable(
 												{
 													"searching" : false,
 													"ajax" : {
-														"url" : "/listItems/" + $("#id").val(),
+														"url" : "/listItems/"
+																+ $("#id")
+																		.val(),
 														"dataSrc" : ""
 													},
 													"columns" : [
@@ -159,15 +195,31 @@
 																	'tr'))
 															.data();
 													var id = data["id"];
+													var type = data["itemType"];
+													var itemType = (type === "Gomlek" ? "Shirt"
+															: (type === "Ceket" ? "Jacket"
+																	: (type === "Yelek" ? "Waist"
+																			: (type === "Pantolon" ? "Pant"
+																					: ""))));
 													if ($(this).attr('id') === "updateBtn") {
-														window.location.href = baseUrl+'saveShirt/'+$("#id").val()+'/'+id;
-																+ id;
+														window.location.href = baseUrl
+																+ 'save'
+																+ itemType
+																+ '/'
+																+ $("#id")
+																		.val()
+																+ '/' + id;
+														+id;
 													} else if ($(this).attr(
 															'id') === "deleteBtn") {
 
 														$
 																.ajax({
-																	url : baseUrl+'deleteShirt/'+id,
+																	url : baseUrl
+																			+ 'delete'
+																			+ itemType
+																			+ '/'
+																			+ id,
 																	dataType : 'json',
 																	type : 'GET',
 																	contentType : 'application/json',
@@ -176,8 +228,12 @@
 																			data,
 																			textStatus,
 																			jQxhr) {
-																		window.location.href = baseUrl+'basket/'+$("#id").val();
-																		
+																		window.location.href = baseUrl
+																				+ 'basket/'
+																				+ $(
+																						"#id")
+																						.val();
+
 																	},
 																	error : function(
 																			jqXhr,

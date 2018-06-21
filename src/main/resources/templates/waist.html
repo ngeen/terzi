@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout">
+<head>
+<title>Yelek Formu</title>
+<th:block layout:fragment="header">
+	<!-- Select2 -->
+	<link rel="stylesheet" th:href="@{/plugins/select2/select2.min.css}">
+</th:block>
+</head>
+<body>
+
+	<th:block layout:fragment="page_header">
+		Yelek Formu
+	</th:block>
+
+	<th:block layout:fragment="breadcrumb">
+		<li class="breadcrumb-item">Yelek Kayıt</li>
+	</th:block>
+
+	<div layout:fragment="page_content">
+		<div class="card card-primary">
+			<div class="card-header">
+				<h3 class="card-title">Yelek Kayıt</h3>
+			</div>
+			<!-- /.card-header -->
+			<!-- form start -->
+			<form role="form" th:object="${waist}">
+				<div class="card-body">
+					<input type="hidden" id="id" name="id" th:field="*{id}"> <input
+						type="hidden" id="basketId" name="basketId" th:value="${basketId}">
+					<div class="form-group">
+						<label>Model Seçiniz</label> <select class="form-control select2"
+							style="width: 100%;" id="dressModelId" name="dressModelId">
+							<option th:each="_dressModel: ${dressModel}"
+								th:text="${_dressModel.dressModel}" th:value="${_dressModel.id}" />
+						</select>
+					</div>
+					<div class="form-group">
+						<label for="gogus">Göğüs</label> <input type="number"
+							class="form-control" id="gogus" name="gogus" placeholder="Göğüs" th:field="*{gogus}">
+					</div>
+					<div class="form-group">
+						<label for="gobek">Göbek</label> <input type="number"
+							class="form-control" id="gobek" name="gobek" placeholder="Göbek" th:field="*{gobek}">
+					</div>
+					<div class="form-group">
+						<label for="ayna">Ayna</label> <input type="number"
+							class="form-control" id="ayna" name="ayna" placeholder="Ayna" th:field="*{ayna}">
+					</div>
+					<div class="form-group">
+						<label for="boy">Boy</label> <input type="number"
+							class="form-control" id="boy" name="boy" placeholder="Boy" th:field="*{boy}">
+					</div>
+				</div>
+				<!-- /.card-body -->
+
+				<div class="card-footer">
+					<button type="submit" class="btn btn-primary">Kaydet</button>
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<th:block layout:fragment="script">
+			<script th:src="@{/plugins/select2/select2.full.min.js}"></script>
+		<!-- page script -->
+		<script>
+		$(document)
+		.ready(
+				function() {
+					//Initialize Select2 Elements
+					$('.select2').select2();
+				});
+			(function($) {
+				$.fn.serializeFormJSON = function() {
+
+					var o = {};
+					var a = this.serializeArray();
+					$.each(a, function() {
+						if (o[this.name]) {
+							if (!o[this.name].push) {
+								o[this.name] = [ o[this.name] ];
+							}
+							o[this.name].push(this.value || '');
+						} else {
+							o[this.name] = this.value || '';
+						}
+					});
+					return o;
+				};
+			})(jQuery);
+
+			$('form').submit(
+					function(e) {
+						var getUrl = window.location;
+						var baseUrl = getUrl.protocol + "//" + getUrl.host
+								+ "/";
+
+						e.preventDefault();
+						var data = $(this).serializeFormJSON();
+						console.log(data);
+
+						$.ajax({
+							url : '/saveWaist',
+							dataType : 'json',
+							type : 'post',
+							contentType : 'application/json',
+							data : JSON.stringify(data),
+							processData : false,
+							success : function(data, textStatus, jQxhr) {
+								window.location.href = baseUrl + 'basket/'
+										+ $("#basketId").val();
+							},
+							error : function(jqXhr, textStatus, errorThrown) {
+								console.log(errorThrown);
+							}
+						});
+
+					});
+		</script>
+	</th:block>
+</body>
