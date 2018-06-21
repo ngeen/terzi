@@ -6,9 +6,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import com.oz.tailor.DTO.BasketDTO;
+import com.oz.tailor.model.Basket;
 import com.oz.tailor.model.Customer;
 import com.oz.tailor.model.DressModel;
 import com.oz.tailor.model.Fabric;
+import com.oz.tailor.repository.BasketRepository;
 import com.oz.tailor.repository.CustomerRepository;
 import com.oz.tailor.repository.DressModelRepository;
 import com.oz.tailor.repository.DressTypeRepository;
@@ -27,6 +30,9 @@ public class IndexController {
 	
 	@Autowired
 	FabricRepository fabricRepository;
+	
+	@Autowired
+	BasketRepository basketRepository;
 	
 	@GetMapping("/")
 	//@ResponseBody
@@ -88,5 +94,33 @@ public class IndexController {
 		Fabric fabric =  fabricRepository.findById(id).get();
 		model.addAttribute("fabric", fabric);
 		return "fabric";
+	}
+	
+	@GetMapping("/baskets")
+	public String baskets() {
+		return "basketList";
+	}
+	
+	@GetMapping("/basket")
+	public String basket(Model model) {
+		model.addAttribute("basket", new BasketDTO());
+		model.addAttribute("customer", customerRepository.findAll());
+		return "basket";
+	}
+	
+	@GetMapping("/basket/{id}")
+	public String basketUpdate(@PathVariable("id") long id, Model model) {
+		Basket basket =  basketRepository.findById(id).get();
+		BasketDTO basketDTO = new BasketDTO();
+		basketDTO.setAmount(basket.getAmount());
+		basketDTO.setCustomerId(basket.getCustomer().getId());
+		if(basket.getFabric() != null && basket.getFabric().getId()>0)
+		basketDTO.setFabricId(basket.getFabric().getId());
+		basketDTO.setDeliveryDate(basket.getDeliveryDate());
+		basketDTO.setFittingDate(basket.getFittingDate());
+		basketDTO.setFittingDate2(basket.getFittingDate2());
+		basketDTO.setId(basket.getId());
+		model.addAttribute("basket", basketDTO);
+		return "basket";
 	}
 }

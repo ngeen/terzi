@@ -1,10 +1,14 @@
 package com.oz.tailor.model;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Customer implements Serializable {
@@ -23,6 +27,10 @@ public class Customer implements Serializable {
 	private int weight;
 	private int height;
 	private int footSize;
+	
+	@OneToMany(mappedBy = "customer")
+    private List<Basket> baskets;
+	
 	public long getId() {
 		return id;
 	}

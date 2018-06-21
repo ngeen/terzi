@@ -18,7 +18,6 @@ public class DressModel implements Serializable {
 	private long id;
 	
 	@ManyToOne
-    @JoinColumn(name="dressTypeId")
 	private DressType dressType;
 	
 	private String dressModel;
