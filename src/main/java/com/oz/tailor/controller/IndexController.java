@@ -121,6 +121,8 @@ public class IndexController {
 		basketDTO.setFittingDate2(basket.getFittingDate2());
 		basketDTO.setId(basket.getId());
 		model.addAttribute("basket", basketDTO);
+		model.addAttribute("customer",basket.getCustomer().getCustomerName()+" "+basket.getCustomer().getCustomerSurname());
+		model.addAttribute("fabrics", fabricRepository.findAll());
 		return "basket";
 	}
 }

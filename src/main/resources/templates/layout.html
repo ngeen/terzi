@@ -158,6 +158,7 @@
 	<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
 	<script>
 		$.widget.bridge('uibutton', $.ui.button)
+		var baseUrl = ('https:' == document.location.protocol ? 'https' : 'http') + "://" + window.location.host + "/"
 	</script>
 	<!-- Bootstrap 4 -->
 	<script th:src="@{/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>

@@ -14,6 +14,7 @@ public class Fabric  implements Serializable{
 	@Id
 	@GeneratedValue()
 	private long id;
+	
 	private String name;
 	
 	public Fabric() {	}

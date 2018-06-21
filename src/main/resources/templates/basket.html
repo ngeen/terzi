@@ -7,6 +7,11 @@
 <th:block layout:fragment="header">
 	<!-- Select2 -->
 	<link rel="stylesheet" th:href="@{/plugins/select2/select2.min.css}">
+	<!-- DataTables -->
+	<link rel="stylesheet"
+		href="/plugins/datatables/dataTables.bootstrap4.css">
+	<link rel="stylesheet" type="text/css"
+		href="/plugins/datatables/extensions/Responsive/css/dataTables.responsive.css">
 </th:block>
 </head>
 <body>
@@ -32,12 +37,68 @@
 					<div th:if="${basket.id == 0}">
 
 						<div class="form-group">
-							<label>Müşteri Seçiniz</label> <select class="form-control select2"
-								style="width: 100%;" id="customerId" name="customerId">
+							<label>Müşteri Seçiniz</label> <select
+								class="form-control select2" style="width: 100%;"
+								id="customerId" name="customerId">
 								<option th:each="_customer: ${customer}"
-									th:text="${_customer.customerName+ ' ' +_customer.customerSurname}" th:value="${_customer.id}" />
+									th:text="${_customer.customerName+ ' ' +_customer.customerSurname}"
+									th:value="${_customer.id}" />
 							</select>
 						</div>
+					</div>
+				</div>
+				<!-- /.card-body -->
+				<div th:if="${basket.id > 0}">
+					<div>
+						<label><h1 th:text="${customer}"></h1></label>
+					</div>
+					<div class="col-lg-3 btn-group">
+						<button id="shirtBtn" class="btn btn-primary" th:onclick="'window.location.href = \'' + @{/saveShirt/{id}(id=${basket.id})} + '\''">Gomlek Ekle</button>
+						<button id="waistBtn" class="btn btn-primary">Yelek Ekle</button>
+						<button id="jacketBtn" class="btn btn-primary">Ceket Ekle</button>
+						<button id="pantBtn" class="btn btn-primary">Pantolon Ekle</button>
+					</div>
+					<table id="example"
+						class="table table-striped table-hover dt-responsive display"
+						cellspacing="0" width="100%">
+						<thead>
+							<tr>
+								<th>Sepet</th>
+								<th>İşlem</th>
+							</tr>
+						</thead>
+						<tfoot>
+							<tr>
+								<th>Sepet</th>
+								<th>İşlem</th>
+							</tr>
+						</tfoot>
+					</table>
+
+					<div class="form-group">
+						<label for="name">Prova Tarihi1</label> <input type="text"
+							class="form-control" id="deliveryDate" name="deliveryDate"
+							placeholder="Teslim Tarihi" th:field="*{deliveryDate}">
+					</div>
+
+					<div class="form-group">
+						<label for="name">Prova Tarihi2</label> <input type="text"
+							class="form-control" id="deliveryDate" name="deliveryDate"
+							placeholder="Teslim Tarihi" th:field="*{deliveryDate}">
+					</div>
+
+					<div class="form-group">
+						<label for="name">Teslim Tarihi</label> <input type="text"
+							class="form-control" id="deliveryDate" name="deliveryDate"
+							placeholder="Teslim Tarihi" th:field="*{deliveryDate}">
+					</div>
+
+					<div class="form-group">
+						<label>Kumaş Markası</label> <select class="form-control select2"
+							style="width: 100%;" id="fabricId" name="fabricId">
+							<option th:each="_fabric: ${fabrics}" th:text="${_fabric.name}"
+								th:value="${_fabric.id == basket.fabricId}" />
+						</select>
 					</div>
 
 					<div class="form-group">
@@ -46,7 +107,6 @@
 							placeholder="Sipariş Tutarı" th:field="*{amount}">
 					</div>
 				</div>
-				<!-- /.card-body -->
 
 				<div class="card-footer">
 					<button type="submit" class="btn btn-primary">Kaydet</button>
@@ -56,12 +116,82 @@
 	</div>
 
 	<th:block layout:fragment="script">
-		<script th:src="@{/plugins/select2/select2.full.min.js}"></script><!-- page script -->
+		<!-- DataTables -->
+		<script src="/plugins/datatables/jquery.dataTables.js"></script>
+		<script src="/plugins/datatables/dataTables.bootstrap4.js"></script>
+		<script type="text/javascript" language="javascript"
+			src="/plugins/datatables/extensions/Responsive/js/dataTables.responsive.js"></script>
+		<script th:src="@{/plugins/select2/select2.full.min.js}"></script>
+		<!-- page script -->
 		<script>
-			$(function() {
-				//Initialize Select2 Elements
-				$('.select2').select2()
-			});
+			$(document)
+					.ready(
+							function() {
+								//Initialize Select2 Elements
+								$('.select2').select2();
+
+								var table = $('#example')
+										.DataTable(
+												{
+													"searching" : false,
+													"ajax" : {
+														"url" : "/listItems/" + $("#id").val(),
+														"dataSrc" : ""
+													},
+													"columns" : [
+															{
+																"data" : "itemType"
+															},
+															{
+																"data" : null,
+																"defaultContent" : "<div class=\"btn-group\"><button id=\"updateBtn\" class=\"btn btn-warning\">Düzenle</button> <button id=\"deleteBtn\" class=\"btn btn-danger\">Sil</button></div>"
+															} ]
+
+												});
+
+								$('#example tbody')
+										.on(
+												'click',
+												'button',
+												function() {
+													var data = table.row(
+															$(this).parents(
+																	'tr'))
+															.data();
+													var id = data["id"];
+													if ($(this).attr('id') === "updateBtn") {
+														window.location.href = baseUrl+'saveShirt/'+$("#id").val()+'/'+id;
+																+ id;
+													} else if ($(this).attr(
+															'id') === "deleteBtn") {
+
+														$
+																.ajax({
+																	url : baseUrl+'deleteShirt/'+id,
+																	dataType : 'json',
+																	type : 'GET',
+																	contentType : 'application/json',
+																	processData : false,
+																	success : function(
+																			data,
+																			textStatus,
+																			jQxhr) {
+																		window.location.href = baseUrl+'basket/'+$("#id").val();
+																		
+																	},
+																	error : function(
+																			jqXhr,
+																			textStatus,
+																			errorThrown) {
+																		console
+																				.log(errorThrown);
+																	}
+																});
+
+													}
+												});
+							});
+
 			(function($) {
 				$.fn.serializeFormJSON = function() {
 
@@ -94,7 +224,7 @@
 					data : JSON.stringify(data),
 					processData : false,
 					success : function(data, textStatus, jQxhr) {
-						window.location.href = '/basket/'+data["result"];
+						window.location.href = '/basket/' + data["result"];
 					},
 					error : function(jqXhr, textStatus, errorThrown) {
 						console.log(errorThrown);

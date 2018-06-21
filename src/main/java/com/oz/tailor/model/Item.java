@@ -28,4 +28,20 @@ public abstract class Item {
 	public void setId(Long id) {
 		this.id = id;
 	}
+
+	public DressModel getDressModel() {
+		return dressModel;
+	}
+
+	public void setDressModel(DressModel dressModel) {
+		this.dressModel = dressModel;
+	}
+
+	public Basket getBasket() {
+		return basket;
+	}
+
+	public void setBasket(Basket basket) {
+		this.basket = basket;
+	}
 }
