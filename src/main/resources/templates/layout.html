@@ -51,8 +51,8 @@
 		<!-- Main Sidebar Container -->
 		<aside class="main-sidebar sidebar-dark-primary elevation-4">
 			<!-- Brand Logo -->
-			<a href="index3.html" class="brand-link"> <img
-				th:src="@{/dist/img/AdminLTELogo.png}" alt="AdminLTE Logo"
+			<a href="/" class="brand-link"> <img
+				th:src="@{/dist/img/AdminLTELogo.png}" alt="Terzi"
 				class="brand-image img-circle elevation-3" style="opacity: .8">
 				<span class="brand-text font-weight-light">Terzi v1.0</span>
 			</a>
@@ -77,20 +77,20 @@
 										<i class="fa fa-users nav-icon" aria-hidden="true"></i>
 										<p>Müşteri İşlemleri</p>
 								</a></li>
-								<li class="nav-item"><a href="/dressModels"
+								<li class="nav-item"><a th:href="@{/dressModels}"
 									class="nav-link"> <i class="fa fa-cube nav-icon"></i>
 										<p>Model İşlemleri</p>
 								</a></li>
-								<li class="nav-item"><a href="/fabrics" class="nav-link">
+								<li class="nav-item"><a th:href="@{/fabrics}" class="nav-link">
 										<i class="nav-icon fa fa-flag-o"></i>
 										<p>Kumaş İşlemleri</p>
 								</a></li>
 							</ul></li>
-						<li class="nav-item"><a href="baskets" class="nav-link">
+						<li class="nav-item"><a th:href="@{/baskets}" class="nav-link">
 								<i class="nav-icon fa fa-pencil-square-o"></i>
 								<p>Sipariş İşlemleri</p>
 						</a></li>
-						<li class="nav-item"><a href="/revenues" class="nav-link">
+						<li class="nav-item"><a th:href="@{/receipts}" class="nav-link">
 								<i class="nav-icon fa fa-credit-card"></i>
 								<p>Tahsilat İşlemleri</p>
 						</a></li>

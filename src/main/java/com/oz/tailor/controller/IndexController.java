@@ -7,15 +7,19 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import com.oz.tailor.DTO.BasketDTO;
+import com.oz.tailor.DTO.ReceiptDTO;
 import com.oz.tailor.model.Basket;
 import com.oz.tailor.model.Customer;
 import com.oz.tailor.model.DressModel;
 import com.oz.tailor.model.Fabric;
+import com.oz.tailor.model.Receipt;
 import com.oz.tailor.repository.BasketRepository;
 import com.oz.tailor.repository.CustomerRepository;
 import com.oz.tailor.repository.DressModelRepository;
 import com.oz.tailor.repository.DressTypeRepository;
 import com.oz.tailor.repository.FabricRepository;
+import com.oz.tailor.repository.ReceiptRepository;
+import com.oz.tailor.repository.ReceiptTypeRespository;
 
 @Controller
 public class IndexController {
@@ -33,6 +37,12 @@ public class IndexController {
 	
 	@Autowired
 	BasketRepository basketRepository;
+	
+	@Autowired
+	ReceiptRepository receiptRepository;
+	
+	@Autowired
+	ReceiptTypeRespository receiptTypeRespository;
 	
 	@GetMapping("/")
 	//@ResponseBody
@@ -124,5 +134,30 @@ public class IndexController {
 		model.addAttribute("customer",basket.getCustomer().getCustomerName()+" "+basket.getCustomer().getCustomerSurname());
 		model.addAttribute("fabrics", fabricRepository.findAll());
 		return "basket";
+	}
+	
+	@GetMapping("/receipts")
+	public String receipts() {
+		return "receiptList";
+	}
+	
+	@GetMapping("/receipt")
+	public String receipt(Model model) {
+		model.addAttribute("receipt", new ReceiptDTO());
+		model.addAttribute("customer", customerRepository.findAll());
+		return "receipt";
+	}
+	
+	@GetMapping("/receipt/{id}")
+	public String receiptUpdate(@PathVariable("id") long id, Model model) {
+		Receipt receipt =  receiptRepository.findById(id).get();
+		ReceiptDTO receiptDTO = new ReceiptDTO();
+		receiptDTO.setReceiptAmount(receipt.getReceiptAmount());
+		receiptDTO.setCustomerId(receipt.getCustomer().getId());
+		receiptDTO.setId(receipt.getId());
+		model.addAttribute("receipt", receiptDTO);
+		model.addAttribute("customer",receipt.getCustomer().getCustomerName()+" "+receipt.getCustomer().getCustomerSurname());
+		model.addAttribute("receiptTypes", receiptTypeRespository.findAll());
+		return "receipt";
 	}
 }

@@ -26,59 +26,61 @@ import com.oz.tailor.repository.BasketRepository;
 public class BasketController {
 	@Autowired
 	BasketRepository basketRepository;
-	
+
 	@Autowired
 	CustomerRepository customerRepository;
-	
-	@Autowired 
+
+	@Autowired
 	FabricRepository fabricRepository;
-	
+
 	@GetMapping("/listBaskets")
-	public ResponseEntity<List<Basket>> listBaskets(HttpServletRequest request, HttpServletResponse response){
+	public ResponseEntity<List<Basket>> listBaskets(HttpServletRequest request, HttpServletResponse response) {
 		List<Basket> baskets = (List<Basket>) basketRepository.findAll();
-        if (baskets.isEmpty()) {
-            return new ResponseEntity(HttpStatus.NO_CONTENT);
-            // You many decide to return HttpStatus.NOT_FOUND
-        }
-        return new ResponseEntity<List<Basket>>(baskets, HttpStatus.OK);
+		if (baskets.isEmpty()) {
+			return new ResponseEntity(HttpStatus.NO_CONTENT);
+			// You many decide to return HttpStatus.NOT_FOUND
+		}
+		return new ResponseEntity<List<Basket>>(baskets, HttpStatus.OK);
 	}
-	
+
 	@GetMapping("/getBasket/{id}")
-	public ResponseEntity<Basket> getBaskets(@PathVariable("id") long id){
-		Basket basket =  basketRepository.findById(id).get();
-        return new ResponseEntity<Basket>(basket, HttpStatus.OK);
+	public ResponseEntity<Basket> getBaskets(@PathVariable("id") long id) {
+		Basket basket = basketRepository.findById(id).get();
+		return new ResponseEntity<Basket>(basket, HttpStatus.OK);
 	}
-	
+
 	@PostMapping("/saveBasket")
-    public ResponseEntity<?> saveBasket(@RequestBody BasketDTO basketDTO) {
-		
-		Basket basket= basketRepository.findById(basketDTO.getId()).orElse(new Basket());
-		
+	public ResponseEntity<?> saveBasket(@RequestBody BasketDTO basketDTO) {
+
+		Basket basket = basketRepository.findById(basketDTO.getId()).orElse(new Basket());
+
 		basket.setAmount(basketDTO.getAmount());
 		basket.setDeliveryDate(basketDTO.getDeliveryDate());
 		basket.setFittingDate(basketDTO.getFittingDate());
 		basket.setFittingDate2(basketDTO.getFittingDate2());
-		basket.setCustomer(customerRepository.findById(basketDTO.getCustomerId()).get());
-		
-		if(basketDTO.getFabricId() > 0)
+
+		if (basketDTO.getCustomerId() > 0)
+			basket.setCustomer(customerRepository.findById(basketDTO.getCustomerId()).get());
+
+		if (basketDTO.getFabricId() > 0)
 			basket.setFabric(fabricRepository.findById(basketDTO.getFabricId()).get());
-		
-        Basket b = basketRepository.save(basket);
- 
-        return new ResponseEntity<String>("{\"result\":"+b.getId()+"}", HttpStatus.CREATED);
-    }
- 
-    // ------------------- Delete a User-----------------------------------------
- 
+
+		Basket b = basketRepository.save(basket);
+
+		return new ResponseEntity<String>("{\"result\":" + b.getId() + "}", HttpStatus.CREATED);
+	}
+
+	// ------------------- Delete a User-----------------------------------------
+
 	@GetMapping("/deleteBasket/{id}")
-    public ResponseEntity<?> deleteUser(@PathVariable("id") long id) {
- 
-        Basket basket = basketRepository.findById(id).get();
-        if (basket == null) {
-            
-        	return new ResponseEntity<String>("{\"result\":\"Kayıt Bulunamadı\"}", HttpStatus.NOT_FOUND);
-        }
-        basketRepository.deleteById(id);
-        return new ResponseEntity<String>("{\"result\":\"success\"}", HttpStatus.CREATED);
-    }
+	public ResponseEntity<?> deleteUser(@PathVariable("id") long id) {
+
+		Basket basket = basketRepository.findById(id).get();
+		if (basket == null) {
+
+			return new ResponseEntity<String>("{\"result\":\"Kayıt Bulunamadı\"}", HttpStatus.NOT_FOUND);
+		}
+		basketRepository.deleteById(id);
+		return new ResponseEntity<String>("{\"result\":\"success\"}", HttpStatus.CREATED);
+	}
 }

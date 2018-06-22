@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout">
+<head>
+<title>Tahsilat İşlemleri</title>
+<th:block loyout:fragment="header">
+	<!-- DataTables -->
+	<link rel="stylesheet"
+		href="/plugins/datatables/dataTables.bootstrap4.css">
+	<link rel="stylesheet" type="text/css"
+		href="/plugins/datatables/extensions/Responsive/css/dataTables.responsive.css">
+</th:block>
+</head>
+<body>
+
+	<th:block layout:fragment="page_header">
+		Tahsilat Listesi
+	</th:block>
+
+	<th:block layout:fragment="breadcrumb">
+		<li class="breadcrumb-item">Tahsilat İşlemleri</li>
+	</th:block>
+
+	<div layout:fragment="page_content">
+		<button class="btn btn-block btn-success btn-lg" onclick="window.location.href='/receipt'">Yeni Tahsilat</button> <br />
+		<table id="example"
+			class="table table-striped table-hover dt-responsive display"
+			cellspacing="0" width="100%">
+			<thead>
+				<tr>
+					<th>Müşteri</th>
+					<th>Tahsilat</th>
+					<th>Borç</th>
+					<th>İşlem</th>
+				</tr>
+			</thead>
+			<tfoot>
+				<tr>
+					<th>Müşteri</th>
+					<th>Tahsilat</th>
+					<th>Borç</th>
+					<th>İşlem</th>
+				</tr>
+			</tfoot>
+		</table>
+	</div>
+	<th:block layout:fragment="script">
+		<!-- DataTables -->
+		<script src="/plugins/datatables/jquery.dataTables.js"></script>
+		<script src="/plugins/datatables/dataTables.bootstrap4.js"></script>
+		<script type="text/javascript" language="javascript"
+			src="/plugins/datatables/extensions/Responsive/js/dataTables.responsive.js"></script>
+		<!-- page script -->
+		<script>
+
+		$(document).ready( function () {
+			var table = $('#example').DataTable( {
+				"searching": false,
+		        "ajax": {
+		            "url": "/listReceipts",
+		            "dataSrc": ""
+		        },
+		        "columns": [
+		            { "data": "customer.customerName" },
+		            { "data": "receiptAmount" },
+		            { "data" : function ( row) {
+		            	console.log(debt(row["customer"]["id"]));
+		                  return "";
+		                } },
+		            { 
+		            	"data": null,
+		                "defaultContent": "<div class=\"btn-group\"><button id=\"updateBtn\" class=\"btn btn-warning\">Düzenle</button></div>"
+		               }
+		        ]
+		        
+		    } );
+			
+			$('#example tbody').on( 'click', 'button', function () {
+		        var data = table.row( $(this).parents('tr') ).data();
+		        var id = data["id"];
+		        if($(this).attr('id') === "updateBtn"){
+		        	window.location.href='/receipt/'+id;
+		        }
+		    } );
+		});
+		
+		var debt = function(userId){
+			let debtAmount;
+			$.ajax({
+				url : '/getUserDebt/'+userId,
+				dataType : 'json',
+				type : 'GET',
+				contentType : 'application/json',
+				processData : false,
+				success : function(data, textStatus, jQxhr) {
+					debtAmount =  data["result"];
+				},
+				error : function(jqXhr, textStatus, errorThrown) {
+					console.log(errorThrown);
+				}
+			});
+			
+			return debtAmount;
+		};
+		</script>
+	</th:block>
+</body>
+</html>

@@ -123,7 +123,7 @@
 						<label>Kumaş Markası</label> <select class="form-control select2"
 							style="width: 100%;" id="fabricId" name="fabricId">
 							<option th:each="_fabric: ${fabrics}" th:text="${_fabric.name}"
-								th:value="${_fabric.id == basket.fabricId}" />
+								th:value="${_fabric.id}" />
 						</select>
 					</div>
 

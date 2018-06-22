@@ -2,13 +2,14 @@ package com.oz.tailor.model;
 
 import java.io.Serializable;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Customer implements Serializable {
@@ -29,7 +30,12 @@ public class Customer implements Serializable {
 	private int footSize;
 	
 	@OneToMany(mappedBy = "customer")
-    private List<Basket> baskets;
+	@JsonIgnore
+	private Set<Basket> baskets = new HashSet<Basket>();
+	
+	@OneToMany(mappedBy = "customer")
+	@JsonIgnore
+	private Set<Receipt> receipts = new HashSet<Receipt>();
 	
 	public long getId() {
 		return id;
@@ -84,6 +90,18 @@ public class Customer implements Serializable {
 	}
 	public void setFootSize(int footSize) {
 		this.footSize = footSize;
+	}
+	public Set<Basket> getBaskets() {
+		return baskets;
+	}
+	public void setBaskets(Set<Basket> baskets) {
+		this.baskets = baskets;
+	}
+	public Set<Receipt> getReceipts() {
+		return receipts;
+	}
+	public void setReceipts(Set<Receipt> receipts) {
+		this.receipts = receipts;
 	}
 
 }

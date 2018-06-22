@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout">
+<head>
+<title>Tahsilat İşlemleri</title>
+<th:block layout:fragment="header">
+	<!-- Select2 -->
+	<link rel="stylesheet" th:href="@{/plugins/select2/select2.min.css}">
+</th:block>
+</head>
+<body>
+
+	<th:block layout:fragment="page_header">
+		Tahsilat Kayıt Formu
+	</th:block>
+
+	<th:block layout:fragment="breadcrumb">
+		<li class="breadcrumb-item">Tahsilat Kayıt</li>
+	</th:block>
+
+	<div layout:fragment="page_content">
+		<div class="card card-primary">
+			<div class="card-header">
+				<h3 class="card-title">Tahsilat Kayıt</h3>
+			</div>
+			<!-- /.card-header -->
+			<!-- form start -->
+			<form role="form" th:object="${receipt}">
+				<div class="card-body">
+					<input type="hidden" id="id" name="id" th:field="*{id}">
+					<div th:if="${receipt.id == 0}">
+
+						<div class="form-group">
+							<label>Müşteri Seçiniz</label> <select
+								class="form-control select2" style="width: 100%;"
+								id="customerId" name="customerId">
+								<option th:each="_customer: ${customer}"
+									th:text="${_customer.customerName+ ' ' +_customer.customerSurname}"
+									th:value="${_customer.id}" />
+							</select>
+						</div>
+					</div>
+				</div>
+				<!-- /.card-body -->
+				<div th:if="${receipt.id > 0}">
+					<div>
+						<label><h1 th:text="${customer}"></h1></label>
+					</div>
+
+					<div class="form-group">
+						<label>Tahsilat Türü</label> <select class="form-control select2"
+							style="width: 100%;" id="receiptTypeId" name="receiptTypeId">
+							<option th:each="_receiptType: ${receiptTypes}" th:text="${_receiptType.name}"
+								th:value="${_receiptType.id}" />
+						</select>
+					</div>
+
+					<div class="form-group">
+						<label for="name">Tahsilat Tutarı</label> <input type="text"
+							class="form-control" id="receiptAmount" name="receiptAmount"
+							placeholder="Tahsilat Tutarı" th:field="*{receiptAmount}">
+					</div>
+				</div>
+
+				<div class="card-footer">
+					<button type="submit" class="btn btn-primary">Kaydet</button>
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<th:block layout:fragment="script">
+		<script th:src="@{/plugins/select2/select2.full.min.js}"></script>
+		<!-- InputMask -->
+		<script th:src="@{/plugins/input-mask/jquery.inputmask.js}"></script>
+		<script
+			th:src="@{/plugins/input-mask/jquery.inputmask.date.extensions.js}"></script>
+		<script th:src="@{/plugins/input-mask/jquery.inputmask.extensions.js}"></script>
+		<!-- page script -->
+		<script>
+			$(document)
+					.ready(
+							function() {
+								//Initialize Select2 Elements
+								$('.select2').select2();
+								$('#fittingDate, #fittingDate2, #deliveryDate').inputmask('dd/mm/yyyy', {
+									'placeholder' : 'dd/mm/yyyy'
+								})
+							});
+
+			(function($) {
+				$.fn.serializeFormJSON = function() {
+
+					var o = {};
+					var a = this.serializeArray();
+					$.each(a, function() {
+						if (o[this.name]) {
+							if (!o[this.name].push) {
+								o[this.name] = [ o[this.name] ];
+							}
+							o[this.name].push(this.value || '');
+						} else {
+							o[this.name] = this.value || '';
+						}
+					});
+					return o;
+				};
+			})(jQuery);
+
+			$('form').submit(function(e) {
+				e.preventDefault();
+				var data = $(this).serializeFormJSON();
+				console.log(data);
+
+				$.ajax({
+					url : '/saveReceipt',
+					dataType : 'json',
+					type : 'post',
+					contentType : 'application/json',
+					data : JSON.stringify(data),
+					processData : false,
+					success : function(data, textStatus, jQxhr) {
+						window.location.href = '/receipt/' + data["result"];
+					},
+					error : function(jqXhr, textStatus, errorThrown) {
+						console.log(errorThrown);
+					}
+				});
+
+			});
+		</script>
+	</th:block>
+</body>
