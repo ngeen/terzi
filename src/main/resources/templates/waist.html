@@ -94,9 +94,6 @@
 
 			$('form').submit(
 					function(e) {
-						var getUrl = window.location;
-						var baseUrl = getUrl.protocol + "//" + getUrl.host
-								+ "/";
 
 						e.preventDefault();
 						var data = $(this).serializeFormJSON();
@@ -110,8 +107,7 @@
 							data : JSON.stringify(data),
 							processData : false,
 							success : function(data, textStatus, jQxhr) {
-								window.location.href = baseUrl + 'basket/'
-										+ $("#basketId").val();
+								window.location.href = '/basket/' + $("#basketId").val();
 							},
 							error : function(jqXhr, textStatus, errorThrown) {
 								console.log(errorThrown);
