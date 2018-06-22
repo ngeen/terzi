@@ -202,8 +202,7 @@
 																			: (type === "Pantolon" ? "Pant"
 																					: ""))));
 													if ($(this).attr('id') === "updateBtn") {
-														window.location.href = baseUrl
-																+ 'save'
+														window.location.href = '/save'
 																+ itemType
 																+ '/'
 																+ $("#id")
@@ -215,8 +214,7 @@
 
 														$
 																.ajax({
-																	url : baseUrl
-																			+ 'delete'
+																	url : '/delete'
 																			+ itemType
 																			+ '/'
 																			+ id,
@@ -228,8 +226,7 @@
 																			data,
 																			textStatus,
 																			jQxhr) {
-																		window.location.href = baseUrl
-																				+ 'basket/'
+																		window.location.href = '/basket/'
 																				+ $(
 																						"#id")
 																						.val();
