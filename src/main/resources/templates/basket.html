@@ -53,18 +53,18 @@
 						<label><h1 th:text="${customer}"></h1></label>
 					</div>
 					<div class="col-lg-3 btn-group">
-						<button id="shirtBtn" class="btn btn-success"
-							th:onclick="'window.location.href = \'' + @{/saveShirt/{id}(id=${basket.id})} + '\''">Gomlek
-							Ekle</button>
-						<button id="waistBtn" class="btn btn-success"
-							th:onclick="'window.location.href = \'' + @{/saveWaist/{id}(id=${basket.id})} + '\''">Yelek
-							Ekle</button>
-						<button id="jacketBtn" class="btn btn-success"
-							th:onclick="'window.location.href = \'' + @{/saveJacket/{id}(id=${basket.id})} + '\''">Ceket
-							Ekle</button>
-						<button id="pantBtn" class="btn btn-success"
-							th:onclick="'window.location.href = \'' + @{/savePant/{id}(id=${basket.id})} + '\''">Pantolon
-							Ekle</button>
+						<a id="shirtBtn" class="btn btn-success"
+							th:href="@{/saveShirt/{id}(id=${basket.id})}">Gomlek
+							Ekle</a>
+						<a id="waistBtn" class="btn btn-success"
+							th:href="@{/saveWaist/{id}(id=${basket.id})}">Yelek
+							Ekle</a>
+						<a id="jacketBtn" class="btn btn-success"
+							th:href="@{/saveJacket/{id}(id=${basket.id})}">Ceket
+							Ekle</a>
+						<a id="pantBtn" class="btn btn-success"
+							th:href="@{/savePant/{id}(id=${basket.id})}">Pantolon
+							Ekle</a>
 					</div>
 					<table id="example"
 						class="table table-striped table-hover dt-responsive display"
