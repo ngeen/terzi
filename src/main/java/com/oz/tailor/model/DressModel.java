@@ -22,6 +22,9 @@ public class DressModel implements Serializable {
 	
 	private String dressModel;
 	
+	@ManyToOne
+	private User user;
+	
 	public DressModel() {	}
 	
 	public DressModel(DressType dressType, String dressModel) {
@@ -51,6 +54,14 @@ public class DressModel implements Serializable {
 
 	public void setDressModel(String dressModel) {
 		this.dressModel = dressModel;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 }

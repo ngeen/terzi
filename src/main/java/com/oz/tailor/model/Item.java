@@ -20,6 +20,9 @@ public abstract class Item {
 	
 	@ManyToOne
 	private Basket basket;
+	
+	@ManyToOne
+	private User user;
 
 	public Long getId() {
 		return id;
@@ -43,5 +46,13 @@ public abstract class Item {
 
 	public void setBasket(Basket basket) {
 		this.basket = basket;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 }

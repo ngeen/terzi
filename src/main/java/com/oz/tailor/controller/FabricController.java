@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.oz.tailor.controller.utils.UserController;
 import com.oz.tailor.model.Fabric;
 import com.oz.tailor.repository.FabricRepository;
 
@@ -21,6 +22,9 @@ import com.oz.tailor.repository.FabricRepository;
 public class FabricController {
 	@Autowired
 	FabricRepository fabricRepository;
+	
+	@Autowired
+	UserController userController;
 	
 	@GetMapping("/listFabrics")
 	public ResponseEntity<List<Fabric>> listFabrics(HttpServletRequest request, HttpServletResponse response){
@@ -40,7 +44,7 @@ public class FabricController {
 	
 	@PostMapping("/saveFabric")
     public ResponseEntity<?> createUser(@RequestBody Fabric fabric) {
-
+		fabric.setUser(userController.getAuthUser());
         fabricRepository.save(fabric);
  
         return new ResponseEntity<String>("{\"result\":\"success\"}", HttpStatus.CREATED);

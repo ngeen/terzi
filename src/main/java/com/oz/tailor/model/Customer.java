@@ -7,6 +7,7 @@ import java.util.Set;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -28,6 +29,9 @@ public class Customer implements Serializable {
 	private int weight;
 	private int height;
 	private int footSize;
+	
+	@ManyToOne
+	private User user;
 	
 	@OneToMany(mappedBy = "customer")
 	@JsonIgnore
@@ -102,6 +106,12 @@ public class Customer implements Serializable {
 	}
 	public void setReceipts(Set<Receipt> receipts) {
 		this.receipts = receipts;
+	}
+	public User getUser() {
+		return user;
+	}
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 }

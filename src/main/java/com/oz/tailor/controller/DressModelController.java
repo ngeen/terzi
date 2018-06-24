@@ -1,7 +1,6 @@
 package com.oz.tailor.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -11,10 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.oz.tailor.controller.utils.UserController;
 import com.oz.tailor.model.DressModel;
 import com.oz.tailor.model.DressType;
 import com.oz.tailor.repository.DressModelRepository;
@@ -27,6 +25,9 @@ public class DressModelController {
 	
 	@Autowired
 	private DressTypeRepository dressTypeRepository;
+	
+	@Autowired 
+	UserController userController;
 	
 	@GetMapping("/listDressModels")
 	public ResponseEntity<List<DressModel>> listModels(HttpServletRequest request, HttpServletResponse response){
@@ -59,6 +60,7 @@ public class DressModelController {
 		DressModel dressModel = dressModelRepository.findById(dressModelId).orElse(new DressModel());
 		dressModel.setDressType(dressTypeRepository.findById(dressTypeId).get());
 		dressModel.setDressModel(dressModelName);
+		dressModel.setUser(userController.getAuthUser());
 		dressModelRepository.save(dressModel);
  
         return new ResponseEntity<String>("{\"result\":\"success\"}", HttpStatus.CREATED);

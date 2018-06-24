@@ -1,5 +1,6 @@
 package com.oz.tailor.controller;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -38,6 +39,9 @@ public class ItemController {
 	@Autowired
 	JacketRepository jacketRepository;
 	
+	@Autowired
+	private ModelMapper modelMapper;
+	
 	
 	@GetMapping("/saveShirt/{basketId}")
 	public String addShirt(@PathVariable("basketId") long basketId, Model model) {
@@ -50,7 +54,8 @@ public class ItemController {
 	@GetMapping("/saveShirt/{basketId}/{shirtId}")
 	public String updateShirt(@PathVariable("basketId") long basketId, @PathVariable("shirtId") long shirtId, Model model) {
 		Gomlek gomlek = shirtRepository.findById(shirtId).get();
-		GomlekDTO gomlekDTO = new GomlekDTO();
+		GomlekDTO gomlekDTO = modelMapper.map(Gomlek.class, GomlekDTO.class);
+		/*GomlekDTO gomlekDTO = new GomlekDTO();
 		gomlekDTO.setBasen(gomlek.getBasen());
 		gomlekDTO.setBoy(gomlek.getBoy());
 		gomlekDTO.setGobek(gomlek.getGobek());
@@ -63,7 +68,7 @@ public class ItemController {
 		gomlekDTO.setRoba(gomlek.getRoba());
 		gomlekDTO.setYaka(gomlek.getYaka());
 		gomlekDTO.setDressModelId(gomlek.getDressModel().getId());
-		gomlekDTO.setBasketId(gomlek.getBasket().getId());
+		gomlekDTO.setBasketId(gomlek.getBasket().getId());*/
 		
 		model.addAttribute("basketId", basketId);
 		model.addAttribute("shirt", gomlekDTO);

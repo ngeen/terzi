@@ -23,6 +23,9 @@ public class Receipt implements Serializable{
 	
 	@ManyToOne
 	private Customer customer;
+	
+	@ManyToOne
+	private User user;
 
 	public long getId() {
 		return id;
@@ -54,6 +57,14 @@ public class Receipt implements Serializable{
 
 	public void setCustomer(Customer customer) {
 		this.customer = customer;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 }

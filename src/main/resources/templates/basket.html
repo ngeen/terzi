@@ -49,6 +49,7 @@
 				</div>
 				<!-- /.card-body -->
 				<div th:if="${basket.id > 0}">
+					<input type="hidden" id="customerId" name="customerId" th:field="*{customerId}">
 					<div>
 						<label><h1 th:text="${customer}"></h1></label>
 					</div>

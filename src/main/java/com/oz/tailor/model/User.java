@@ -52,4 +52,12 @@ public class User implements Serializable {
 	public void setRoles(String[] roles) {
 		this.roles = roles;
 	}
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
 }

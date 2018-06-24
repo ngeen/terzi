@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 @Entity
@@ -21,6 +22,9 @@ public class DressType implements Serializable {
 	
 	@OneToMany(mappedBy = "dressType")
     private List<DressModel> dressModels;
+	
+	@ManyToOne
+	private User user;
 	
 	public DressType() {	}
 	
@@ -42,6 +46,14 @@ public class DressType implements Serializable {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 }

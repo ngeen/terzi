@@ -5,6 +5,8 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.modelmapper.Converter;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,12 +17,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.oz.tailor.DTO.BasketDTO;
+import com.oz.tailor.controller.utils.UserController;
 import com.oz.tailor.model.Basket;
-import com.oz.tailor.model.Customer;
 import com.oz.tailor.repository.BasketRepository;
 import com.oz.tailor.repository.CustomerRepository;
 import com.oz.tailor.repository.FabricRepository;
-import com.oz.tailor.repository.BasketRepository;
 
 @RestController
 public class BasketController {
@@ -32,6 +33,12 @@ public class BasketController {
 
 	@Autowired
 	FabricRepository fabricRepository;
+
+	@Autowired
+	private ModelMapper modelMapper;
+	
+	@Autowired
+	UserController userController;
 
 	@GetMapping("/listBaskets")
 	public ResponseEntity<List<Basket>> listBaskets(HttpServletRequest request, HttpServletResponse response) {
@@ -52,18 +59,21 @@ public class BasketController {
 	@PostMapping("/saveBasket")
 	public ResponseEntity<?> saveBasket(@RequestBody BasketDTO basketDTO) {
 
-		Basket basket = basketRepository.findById(basketDTO.getId()).orElse(new Basket());
+		Converter<BasketDTO, Basket> converter = context -> {
+			Basket entity = context.getDestination();
+			
+			if (context.getSource().getCustomerId() > 0)
+				entity.setCustomer(customerRepository.findById(context.getSource().getCustomerId()).get());
 
-		basket.setAmount(basketDTO.getAmount());
-		basket.setDeliveryDate(basketDTO.getDeliveryDate());
-		basket.setFittingDate(basketDTO.getFittingDate());
-		basket.setFittingDate2(basketDTO.getFittingDate2());
+			if (context.getSource().getFabricId() > 0)
+				entity.setFabric(fabricRepository.findById(context.getSource().getFabricId()).get());
 
-		if (basketDTO.getCustomerId() > 0)
-			basket.setCustomer(customerRepository.findById(basketDTO.getCustomerId()).get());
-
-		if (basketDTO.getFabricId() > 0)
-			basket.setFabric(fabricRepository.findById(basketDTO.getFabricId()).get());
+			return entity;
+		};
+		modelMapper.createTypeMap(BasketDTO.class, Basket.class).setPostConverter(converter);
+		
+		Basket basket = modelMapper.map(basketDTO, Basket.class);
+		basket.setUser(userController.getAuthUser());
 
 		Basket b = basketRepository.save(basket);
 

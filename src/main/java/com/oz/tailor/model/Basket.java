@@ -1,5 +1,6 @@
 package com.oz.tailor.model;
 
+import java.io.Serializable;
 import java.sql.Date;
 import java.util.List;
 
@@ -12,7 +13,7 @@ import javax.persistence.OneToMany;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-public class Basket {
+public class Basket implements Serializable {
 	
 	@Id
 	@GeneratedValue()
@@ -33,6 +34,9 @@ public class Basket {
 	private Fabric fabric;
 	
 	private double amount;
+	
+	@ManyToOne
+	private User user;
 
 	public Long getId() {
 		return id;
@@ -88,6 +92,14 @@ public class Basket {
 
 	public void setFabric(Fabric fabric) {
 		this.fabric = fabric;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 
