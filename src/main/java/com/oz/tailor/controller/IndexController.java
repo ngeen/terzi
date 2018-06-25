@@ -1,6 +1,5 @@
 package com.oz.tailor.controller;
 
-import org.apache.catalina.mapper.Mapper;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,6 +14,7 @@ import com.oz.tailor.model.Customer;
 import com.oz.tailor.model.DressModel;
 import com.oz.tailor.model.Fabric;
 import com.oz.tailor.model.Receipt;
+import com.oz.tailor.model.User;
 import com.oz.tailor.repository.BasketRepository;
 import com.oz.tailor.repository.CustomerRepository;
 import com.oz.tailor.repository.DressModelRepository;
@@ -22,6 +22,7 @@ import com.oz.tailor.repository.DressTypeRepository;
 import com.oz.tailor.repository.FabricRepository;
 import com.oz.tailor.repository.ReceiptRepository;
 import com.oz.tailor.repository.ReceiptTypeRespository;
+import com.oz.tailor.repository.UserRepository;
 
 @Controller
 public class IndexController {
@@ -45,6 +46,9 @@ public class IndexController {
 	
 	@Autowired
 	ReceiptTypeRespository receiptTypeRespository;
+	
+	@Autowired
+	UserRepository userRepository;
 	
 	@Autowired
 	ModelMapper modelMapper;
@@ -165,5 +169,23 @@ public class IndexController {
 		model.addAttribute("customer",receipt.getCustomer().getCustomerName()+" "+receipt.getCustomer().getCustomerSurname());
 		model.addAttribute("receiptTypes", receiptTypeRespository.findAll());
 		return "receipt";
+	}
+	
+	@GetMapping("/users")
+	public String users() {
+		return "userList";
+	}
+	
+	@GetMapping("/user")
+	public String user(Model model) {
+		model.addAttribute("user", new User());
+		return "user";
+	}
+	
+	@GetMapping("/user/{id}")
+	public String userUpdate(@PathVariable("id") long id, Model model) {
+		User user =  userRepository.findById(id).get();
+		model.addAttribute("user", user);
+		return "user";
 	}
 }

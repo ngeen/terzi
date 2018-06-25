@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout">
+<head>
+<title>Kullanıcı İşlemleri</title>
+</head>
+<body>
+
+	<th:block layout:fragment="page_header">
+		Kullanıcı Kayıt Formu
+	</th:block>
+
+	<th:block layout:fragment="breadcrumb">
+		<li class="breadcrumb-item">Kullanıcı Kayıt</li>
+	</th:block>
+
+	<div layout:fragment="page_content">
+		<div class="card card-primary">
+			<div class="card-header">
+				<h3 class="card-title">Kullanıcı Kayıt</h3>
+			</div>
+			<!-- /.card-header -->
+			<!-- form start -->
+			<form role="form" th:object="${user}">
+				<div class="card-body">
+					<input type="hidden" id="id" name="id" th:field="*{id}">
+					<div class="form-group">
+						<label for="userName">Kullanıcı Adı</label> <input type="text"
+							class="form-control" id="userName" name="userName"
+							placeholder="Kullanıcı Adı" th:field="*{userName}">
+					</div>
+					<div class="form-group">
+						<label for="password">Kullanıcı Şifre</label> <input type="password"
+							class="form-control" id="password" name="password"
+							placeholder="Kullanıcı Şifre" th:field="*{password}">
+					</div>
+				</div>
+				<!-- /.card-body -->
+
+				<div class="card-footer">
+					<button type="submit" class="btn btn-primary">Kaydet</button>
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<th:block layout:fragment="script">
+		<!-- page script -->
+		<script>
+			(function($) {
+				$.fn.serializeFormJSON = function() {
+
+					var o = {};
+					var a = this.serializeArray();
+					$.each(a, function() {
+						if (o[this.name]) {
+							if (!o[this.name].push) {
+								o[this.name] = [ o[this.name] ];
+							}
+							o[this.name].push(this.value || '');
+						} else {
+							o[this.name] = this.value || '';
+						}
+					});
+					return o;
+				};
+			})(jQuery);
+
+			$('form').submit(function(e) {
+				e.preventDefault();
+				var data = $(this).serializeFormJSON();
+				console.log(data);
+
+				$.ajax({
+					url : '/saveUser',
+					dataType : 'json',
+					type : 'post',
+					contentType : 'application/json',
+					data : JSON.stringify(data),
+					processData : false,
+					success : function(data, textStatus, jQxhr) {
+						window.location.href = '/users';
+					},
+					error : function(jqXhr, textStatus, errorThrown) {
+						console.log(errorThrown);
+					}
+				});
+
+			});
+		</script>
+	</th:block>
+</body>

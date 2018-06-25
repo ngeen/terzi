@@ -94,6 +94,10 @@
 								<i class="nav-icon fa fa-credit-card"></i>
 								<p>Tahsilat İşlemleri</p>
 						</a></li>
+						<li sec:authorize="hasRole('ROLE_ADMIN')" class="nav-item"><a th:href="@{/users}" class="nav-link">
+								<i class="nav-icon fa fa-credit-card"></i>
+								<p>Kullanıcı İşlemleri</p>
+						</a></li>
 
 					</ul>
 				</nav>
