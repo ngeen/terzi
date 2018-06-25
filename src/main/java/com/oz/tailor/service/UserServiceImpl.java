@@ -1,6 +1,7 @@
 package com.oz.tailor.service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,9 +32,12 @@ public class UserServiceImpl implements UserDetailsService {
  
         String username = user.getUserName();
         String password = user.getPassword();
-        String roles = user.getRoles().toString();
+        List<SimpleGrantedAuthority> authList = getAuthorities("user");
+        if(Arrays.stream(user.getRoles()).anyMatch(x -> x.equals("ADMIN"))) {
+        	authList = getAuthorities("admin");
+        } 
  
-        List<SimpleGrantedAuthority> authList = getAuthorities(roles);
+        
  
         //get the encoded password
         //BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
