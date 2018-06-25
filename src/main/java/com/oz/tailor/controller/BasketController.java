@@ -1,6 +1,8 @@
 package com.oz.tailor.controller;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -79,7 +81,10 @@ public class BasketController {
 
 			return new ResponseEntity<String>("{\"result\":" + b.getId() + "}", HttpStatus.CREATED);
 		} catch (Exception e) {
-			return new ResponseEntity<String>("{\"result\": false, error: \"" +e.getStackTrace().toString()+"\"}", HttpStatus.CREATED);
+			String error =  Arrays.stream(e.getStackTrace())
+            .map(s->s.toString())
+            .collect(Collectors.joining("\n")).toString();
+			return new ResponseEntity<String>("{\"result\": false, error: \"" +error+"\"}", HttpStatus.CREATED);
 		}
 
 	}
