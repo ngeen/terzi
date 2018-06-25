@@ -28,7 +28,7 @@ public class FabricController {
 	
 	@GetMapping("/listFabrics")
 	public ResponseEntity<List<Fabric>> listFabrics(HttpServletRequest request, HttpServletResponse response){
-		List<Fabric> fabrics = (List<Fabric>) fabricRepository.findAll();
+		List<Fabric> fabrics = (List<Fabric>) fabricRepository.findAllByUserId(userController.getAuthUser().getId());
         if (fabrics.isEmpty()) {
             return new ResponseEntity(HttpStatus.NO_CONTENT);
             // You many decide to return HttpStatus.NOT_FOUND

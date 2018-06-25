@@ -44,7 +44,7 @@ public class BasketController {
 
 	@GetMapping("/listBaskets")
 	public ResponseEntity<List<Basket>> listBaskets(HttpServletRequest request, HttpServletResponse response) {
-		List<Basket> baskets = (List<Basket>) basketRepository.findAll();
+		List<Basket> baskets = (List<Basket>) basketRepository.findAllByUserId(userController.getAuthUser().getId());
 		if (baskets.isEmpty()) {
 			return new ResponseEntity(HttpStatus.NO_CONTENT);
 			// You many decide to return HttpStatus.NOT_FOUND

@@ -31,7 +31,7 @@ public class DressModelController {
 	
 	@GetMapping("/listDressModels")
 	public ResponseEntity<List<DressModel>> listModels(HttpServletRequest request, HttpServletResponse response){
-		List<DressModel> models = (List<DressModel>) dressModelRepository.findAll();
+		List<DressModel> models = (List<DressModel>) dressModelRepository.findAllByUserId(userController.getAuthUser().getId());
         if (models.isEmpty()) {
             return new ResponseEntity(HttpStatus.NO_CONTENT);
             // You many decide to return HttpStatus.NOT_FOUND

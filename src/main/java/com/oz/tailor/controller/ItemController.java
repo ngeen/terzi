@@ -11,6 +11,7 @@ import com.oz.tailor.DTO.CeketDTO;
 import com.oz.tailor.DTO.GomlekDTO;
 import com.oz.tailor.DTO.PantolonDTO;
 import com.oz.tailor.DTO.YelekDTO;
+import com.oz.tailor.controller.utils.UserController;
 import com.oz.tailor.model.Ceket;
 import com.oz.tailor.model.Gomlek;
 import com.oz.tailor.model.Pantolon;
@@ -40,6 +41,9 @@ public class ItemController {
 	JacketRepository jacketRepository;
 	
 	@Autowired
+	UserController userController;
+	
+	@Autowired
 	private ModelMapper modelMapper;
 	
 	
@@ -47,7 +51,7 @@ public class ItemController {
 	public String addShirt(@PathVariable("basketId") long basketId, Model model) {
 		model.addAttribute("basketId", basketId);
 		model.addAttribute("shirt",new GomlekDTO());
-		model.addAttribute("dressModel", dressModelRepository.findAll());
+		model.addAttribute("dressModel", dressModelRepository.findAllByUserId(userController.getAuthUser().getId()));
 		return "shirt";
 	}
 	
@@ -72,7 +76,7 @@ public class ItemController {
 		
 		model.addAttribute("basketId", basketId);
 		model.addAttribute("shirt", gomlekDTO);
-		model.addAttribute("dressModel", dressModelRepository.findAll());
+		model.addAttribute("dressModel", dressModelRepository.findAllByUserId(userController.getAuthUser().getId()));
 		return "shirt";
 	}
 	
@@ -80,7 +84,7 @@ public class ItemController {
 	public String addWaist(@PathVariable("basketId") long basketId, Model model) {
 		model.addAttribute("basketId", basketId);
 		model.addAttribute("waist",new YelekDTO());
-		model.addAttribute("dressModel", dressModelRepository.findAll());
+		model.addAttribute("dressModel", dressModelRepository.findAllByUserId(userController.getAuthUser().getId()));
 		return "waist";
 	}
 	
@@ -97,7 +101,7 @@ public class ItemController {
 		
 		model.addAttribute("basketId", basketId);
 		model.addAttribute("waist", yelekDTO);
-		model.addAttribute("dressModel", dressModelRepository.findAll());
+		model.addAttribute("dressModel", dressModelRepository.findAllByUserId(userController.getAuthUser().getId()));
 		return "waist";
 	}
 	
@@ -105,7 +109,7 @@ public class ItemController {
 	public String addPant(@PathVariable("basketId") long basketId, Model model) {
 		model.addAttribute("basketId", basketId);
 		model.addAttribute("pant",new PantolonDTO());
-		model.addAttribute("dressModel", dressModelRepository.findAll());
+		model.addAttribute("dressModel", dressModelRepository.findAllByUserId(userController.getAuthUser().getId()));
 		return "pant";
 	}
 	
@@ -124,7 +128,7 @@ public class ItemController {
 		
 		model.addAttribute("basketId", basketId);
 		model.addAttribute("pant", pantolonDTO);
-		model.addAttribute("dressModel", dressModelRepository.findAll());
+		model.addAttribute("dressModel", dressModelRepository.findAllByUserId(userController.getAuthUser().getId()));
 		return "pant";
 	}
 	
@@ -132,7 +136,7 @@ public class ItemController {
 	public String addJacket(@PathVariable("basketId") long basketId, Model model) {
 		model.addAttribute("basketId", basketId);
 		model.addAttribute("jacket",new CeketDTO());
-		model.addAttribute("dressModel", dressModelRepository.findAll());
+		model.addAttribute("dressModel", dressModelRepository.findAllByUserId(userController.getAuthUser().getId()));
 		return "jacket";
 	}
 	
@@ -152,7 +156,7 @@ public class ItemController {
 		
 		model.addAttribute("basketId", basketId);
 		model.addAttribute("jacket", ceketDTO);
-		model.addAttribute("dressModel", dressModelRepository.findAll());
+		model.addAttribute("dressModel", dressModelRepository.findAllByUserId(userController.getAuthUser().getId()));
 		return "jacket";
 	}
 	

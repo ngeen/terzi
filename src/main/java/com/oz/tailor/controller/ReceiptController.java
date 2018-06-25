@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.oz.tailor.DTO.ReceiptDTO;
+import com.oz.tailor.controller.utils.UserController;
 import com.oz.tailor.model.Customer;
 import com.oz.tailor.model.Receipt;
 import com.oz.tailor.repository.CustomerRepository;
@@ -31,10 +32,13 @@ public class ReceiptController {
 
 	@Autowired
 	ReceiptTypeRespository receiptTypeRespository;
+	
+	@Autowired
+	UserController userController;
 
 	@GetMapping("/listReceipts")
 	public ResponseEntity<List<Receipt>> listReceipts(HttpServletRequest request, HttpServletResponse response) {
-		List<Receipt> receipts = (List<Receipt>) receiptRepository.findAll();
+		List<Receipt> receipts = (List<Receipt>) receiptRepository.findAllByUserId(userController.getAuthUser().getId());
 		if (receipts.isEmpty()) {
 			return new ResponseEntity(HttpStatus.NO_CONTENT);
 			// You many decide to return HttpStatus.NOT_FOUND

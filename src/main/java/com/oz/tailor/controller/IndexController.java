@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import com.oz.tailor.DTO.BasketDTO;
 import com.oz.tailor.DTO.ReceiptDTO;
+import com.oz.tailor.controller.utils.UserController;
 import com.oz.tailor.model.Basket;
 import com.oz.tailor.model.Customer;
 import com.oz.tailor.model.DressModel;
@@ -49,6 +50,9 @@ public class IndexController {
 	
 	@Autowired
 	UserRepository userRepository;
+	
+	@Autowired
+	UserController userController;
 	
 	@Autowired
 	ModelMapper modelMapper;
@@ -142,7 +146,7 @@ public class IndexController {
 		basketDTO.setId(basket.getId());*/
 		model.addAttribute("basket", basketDTO);
 		model.addAttribute("customer",basket.getCustomer().getCustomerName()+" "+basket.getCustomer().getCustomerSurname());
-		model.addAttribute("fabrics", fabricRepository.findAll());
+		model.addAttribute("fabrics", fabricRepository.findAllByUserId(userController.getAuthUser().getId()));
 		return "basket";
 	}
 	

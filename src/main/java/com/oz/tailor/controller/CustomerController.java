@@ -28,7 +28,7 @@ public class CustomerController {
 	
 	@GetMapping("/listCustomers")
 	public ResponseEntity<List<Customer>> listCustomers(HttpServletRequest request, HttpServletResponse response){
-		List<Customer> customers = (List<Customer>) customerRepository.findAll();
+		List<Customer> customers = (List<Customer>) customerRepository.findAllByUserId(userController.getAuthUser().getId());
         if (customers.isEmpty()) {
             return new ResponseEntity(HttpStatus.NO_CONTENT);
             // You many decide to return HttpStatus.NOT_FOUND
