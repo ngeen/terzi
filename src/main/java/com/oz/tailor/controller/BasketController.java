@@ -61,18 +61,6 @@ public class BasketController {
 	@PostMapping("/saveBasket")
 	public ResponseEntity<?> saveBasket(@RequestBody BasketDTO basketDTO) {
 		try {
-			Converter<BasketDTO, Basket> converter = context -> {
-				Basket entity = context.getDestination();
-				
-				if (context.getSource().getCustomerId() > 0)
-					entity.setCustomer(customerRepository.findById(context.getSource().getCustomerId()).get());
-
-				if (context.getSource().getFabricId() > 0)
-					entity.setFabric(fabricRepository.findById(context.getSource().getFabricId()).get());
-
-				return entity;
-			};
-			modelMapper.createTypeMap(BasketDTO.class, Basket.class).setPostConverter(converter);
 			
 			Basket basket = modelMapper.map(basketDTO, Basket.class);
 			basket.setUser(userController.getAuthUser());
@@ -81,10 +69,7 @@ public class BasketController {
 
 			return new ResponseEntity<String>("{\"result\":" + b.getId() + "}", HttpStatus.CREATED);
 		} catch (Exception e) {
-			String error =  Arrays.stream(e.getStackTrace())
-            .map(s->s.toString())
-            .collect(Collectors.joining("\n")).toString();
-			return new ResponseEntity<String>("{\"result\": false, error: \"" +error+"\"}", HttpStatus.CREATED);
+			return new ResponseEntity<String>("{\"result\": false, error: \"" +e.getMessage()+"\"}", HttpStatus.CREATED);
 		}
 
 	}

@@ -1,5 +1,7 @@
 package com.oz.tailor.controller;
 
+import org.apache.catalina.mapper.Mapper;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -43,6 +45,9 @@ public class IndexController {
 	
 	@Autowired
 	ReceiptTypeRespository receiptTypeRespository;
+	
+	@Autowired
+	ModelMapper modelMapper;
 	
 	@GetMapping("/")
 	//@ResponseBody
@@ -121,7 +126,8 @@ public class IndexController {
 	@GetMapping("/basket/{id}")
 	public String basketUpdate(@PathVariable("id") long id, Model model) {
 		Basket basket =  basketRepository.findById(id).get();
-		BasketDTO basketDTO = new BasketDTO();
+		BasketDTO basketDTO = modelMapper.map(basket, BasketDTO.class);
+		/*BasketDTO basketDTO = new BasketDTO();
 		basketDTO.setAmount(basket.getAmount());
 		basketDTO.setCustomerId(basket.getCustomer().getId());
 		if(basket.getFabric() != null && basket.getFabric().getId()>0)
@@ -129,7 +135,7 @@ public class IndexController {
 		basketDTO.setDeliveryDate(basket.getDeliveryDate());
 		basketDTO.setFittingDate(basket.getFittingDate());
 		basketDTO.setFittingDate2(basket.getFittingDate2());
-		basketDTO.setId(basket.getId());
+		basketDTO.setId(basket.getId());*/
 		model.addAttribute("basket", basketDTO);
 		model.addAttribute("customer",basket.getCustomer().getCustomerName()+" "+basket.getCustomer().getCustomerSurname());
 		model.addAttribute("fabrics", fabricRepository.findAll());

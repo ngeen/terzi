@@ -91,7 +91,7 @@
 								<span class="input-group-text"><i class="fa fa-calendar"></i></span>
 							</div>
 							<input type="text" class="form-control" id="fittingDate"
-								name="fittingDate" th:field="*{fittingDate}"
+								name="fittingDate" th:value="${#dates.format(basket.fittingDate, 'dd-MM-yyyy')}"
 								data-inputmask="'alias': 'dd/mm/yyyy'" data-mask>
 						</div>
 					</div>
@@ -103,7 +103,7 @@
 								<span class="input-group-text"><i class="fa fa-calendar"></i></span>
 							</div>
 							<input type="text" class="form-control" id="fittingDate2"
-								name="fittingDate2" th:field="*{fittingDate2}"
+								name="fittingDate2" th:value="${#dates.format(basket.fittingDate2, 'dd-MM-yyyy')}"
 								data-inputmask="'alias': 'dd/mm/yyyy'" data-mask>
 						</div>
 					</div>
@@ -115,7 +115,7 @@
 								<span class="input-group-text"><i class="fa fa-calendar"></i></span>
 							</div>
 							<input type="text" class="form-control" id="deliveryDate"
-								name="deliveryDate" th:field="*{deliveryDate}"
+								name="deliveryDate" th:value="${#dates.format(basket.fittingDate, 'dd-MM-yyyy')}"
 								data-inputmask="'alias': 'dd/mm/yyyy'" data-mask>
 						</div>
 					</div>

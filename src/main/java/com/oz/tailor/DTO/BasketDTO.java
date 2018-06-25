@@ -1,12 +1,19 @@
 package com.oz.tailor.DTO;
 
-import java.sql.Date;
+
+import java.util.Date;
+
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.oz.tailor.util.JsonDateDeserializer;
 
 public class BasketDTO {
 	private long id;
 	private long customerId;
+	@JsonDeserialize(using = JsonDateDeserializer.class)
 	private Date fittingDate;
+	@JsonDeserialize(using = JsonDateDeserializer.class)
 	private Date fittingDate2;
+	@JsonDeserialize(using = JsonDateDeserializer.class)
 	private Date deliveryDate;	
 	private long fabricId;
 	private double amount;
