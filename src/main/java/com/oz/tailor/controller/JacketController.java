@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.oz.tailor.DTO.CeketDTO;
+import com.oz.tailor.controller.utils.UserController;
 import com.oz.tailor.model.Ceket;
 import com.oz.tailor.repository.BasketRepository;
 import com.oz.tailor.repository.DressModelRepository;
@@ -30,6 +31,9 @@ public class JacketController {
 	@Autowired
 	ItemRepository itemRepository;
 	
+	@Autowired
+	UserController userController;
+	
 	@PostMapping("/saveJacket")
     public ResponseEntity<?> createUser(@RequestBody CeketDTO ceketDTO) {
 		Ceket ceket = new Ceket();
@@ -42,7 +46,7 @@ public class JacketController {
 		ceket.setPazu(ceketDTO.getPazu());
 		ceket.setDressModel(dressModelRepository.findById(ceketDTO.getDressModelId()).get());
 		ceket.setBasket(basketRepository.findById(ceketDTO.getBasketId()).get());
-		
+		ceket.setUser(userController.getAuthUser());
 		jacketRepository.save(ceket);
  
         return new ResponseEntity<String>("{\"result\":\"success\"}", HttpStatus.CREATED);

@@ -55,6 +55,9 @@ public class IndexController {
 	UserController userController;
 	
 	@Autowired
+	ReceiptController receiptController;
+	
+	@Autowired
 	ModelMapper modelMapper;
 	
 	@GetMapping("/")
@@ -165,10 +168,8 @@ public class IndexController {
 	@GetMapping("/receipt/{id}")
 	public String receiptUpdate(@PathVariable("id") long id, Model model) {
 		Receipt receipt =  receiptRepository.findById(id).get();
-		ReceiptDTO receiptDTO = new ReceiptDTO();
-		receiptDTO.setReceiptAmount(receipt.getReceiptAmount());
-		receiptDTO.setCustomerId(receipt.getCustomer().getId());
-		receiptDTO.setId(receipt.getId());
+		ReceiptDTO receiptDTO = modelMapper.map(receipt, ReceiptDTO.class);
+		receiptDTO.setCustomerDebt(receiptController.userDebt(receiptDTO.getCustomerId()));
 		model.addAttribute("receipt", receiptDTO);
 		model.addAttribute("customer",receipt.getCustomer().getCustomerName()+" "+receipt.getCustomer().getCustomerSurname());
 		model.addAttribute("receiptTypes", receiptTypeRespository.findAll());

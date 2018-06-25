@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.oz.tailor.DTO.PantolonDTO;
+import com.oz.tailor.controller.utils.UserController;
 import com.oz.tailor.model.Pantolon;
 import com.oz.tailor.repository.BasketRepository;
 import com.oz.tailor.repository.DressModelRepository;
@@ -30,6 +31,9 @@ public class PantController {
 	@Autowired
 	ItemRepository itemRepository;
 	
+	@Autowired
+	UserController userController;
+	
 	@PostMapping("/savePant")
     public ResponseEntity<?> createUser(@RequestBody PantolonDTO pantolonDTO) {
 		Pantolon pantolon = new Pantolon();
@@ -41,7 +45,7 @@ public class PantController {
 		pantolon.setPaca(pantolonDTO.getPaca());
 		pantolon.setDressModel(dressModelRepository.findById(pantolonDTO.getDressModelId()).get());
 		pantolon.setBasket(basketRepository.findById(pantolonDTO.getBasketId()).get());
-		
+		pantolon.setUser(userController.getAuthUser());
 		pantRepository.save(pantolon);
  
         return new ResponseEntity<String>("{\"result\":\"success\"}", HttpStatus.CREATED);

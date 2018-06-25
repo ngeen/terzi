@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.oz.tailor.DTO.GomlekDTO;
 import com.oz.tailor.DTO.ItemDTO;
+import com.oz.tailor.controller.utils.UserController;
 import com.oz.tailor.model.Gomlek;
 import com.oz.tailor.model.Item;
 import com.oz.tailor.repository.BasketRepository;
@@ -28,18 +29,21 @@ import com.oz.tailor.repository.ShirtRepository;
 public class ShirtController {
 	@Autowired
 	ShirtRepository shirtRepository;
-	
+
 	@Autowired
 	DressModelRepository dressModelRepository;
-	
+
 	@Autowired
 	BasketRepository basketRepository;
-	
+
 	@Autowired
 	ItemRepository itemRepository;
-	
+
+	@Autowired
+	UserController userController;
+
 	@PostMapping("/saveShirt")
-    public ResponseEntity<?> createUser(@RequestBody GomlekDTO gomlekDTO) {
+	public ResponseEntity<?> createUser(@RequestBody GomlekDTO gomlekDTO) {
 		Gomlek gomlek = new Gomlek();
 		gomlek.setBasen(gomlekDTO.getBasen());
 		gomlek.setBoy(gomlekDTO.getBoy());
@@ -55,28 +59,30 @@ public class ShirtController {
 		gomlek.setDressModel(dressModelRepository.findById(gomlekDTO.getDressModelId()).get());
 		gomlek.setBasket(basketRepository.findById(gomlekDTO.getBasketId()).get());
 		
+		
+		gomlek.setUser(userController.getAuthUser());
 		shirtRepository.save(gomlek);
- 
-        return new ResponseEntity<String>("{\"result\":\"success\"}", HttpStatus.CREATED);
-    }
- 
-    // ------------------- Delete a User-----------------------------------------
- 
+
+		return new ResponseEntity<String>("{\"result\":\"success\"}", HttpStatus.CREATED);
+	}
+
+	// ------------------- Delete a User-----------------------------------------
+
 	@GetMapping("/deleteShirt/{id}")
-    public ResponseEntity<?> deleteUser(@PathVariable("id") long id) {
- 
-        Gomlek gomlek = shirtRepository.findById(id).get();
-        if (gomlek == null) {
-            
-        	return new ResponseEntity<String>("{\"result\":\"Kayıt Bulunamadı\"}", HttpStatus.NOT_FOUND);
-        }
-        shirtRepository.deleteById(id);
-        return new ResponseEntity<String>("{\"result\":\"success\"}", HttpStatus.CREATED);
-    }
-	
+	public ResponseEntity<?> deleteUser(@PathVariable("id") long id) {
+
+		Gomlek gomlek = shirtRepository.findById(id).get();
+		if (gomlek == null) {
+
+			return new ResponseEntity<String>("{\"result\":\"Kayıt Bulunamadı\"}", HttpStatus.NOT_FOUND);
+		}
+		shirtRepository.deleteById(id);
+		return new ResponseEntity<String>("{\"result\":\"success\"}", HttpStatus.CREATED);
+	}
+
 	@GetMapping("/listItems/{basketId}")
-	public ResponseEntity<List<ItemDTO>> listItems(@PathVariable("basketId") long basketId){
-		List<ItemDTO> items =  new ArrayList<ItemDTO>();
+	public ResponseEntity<List<ItemDTO>> listItems(@PathVariable("basketId") long basketId) {
+		List<ItemDTO> items = new ArrayList<ItemDTO>();
 		for (Item item : itemRepository.findAllByBasketId(basketId)) {
 			ItemDTO itemDTO = new ItemDTO();
 			itemDTO.setId(item.getId());
@@ -85,10 +91,10 @@ public class ShirtController {
 			itemDTO.setItemType(item.getClass().getSimpleName());
 			items.add(itemDTO);
 		}
-        if (items.isEmpty()) {
-            return new ResponseEntity(HttpStatus.NO_CONTENT);
-            // You many decide to return HttpStatus.NOT_FOUND
-        }
-        return new ResponseEntity<List<ItemDTO>>(items, HttpStatus.OK);
+		if (items.isEmpty()) {
+			return new ResponseEntity(HttpStatus.NO_CONTENT);
+			// You many decide to return HttpStatus.NOT_FOUND
+		}
+		return new ResponseEntity<List<ItemDTO>>(items, HttpStatus.OK);
 	}
 }

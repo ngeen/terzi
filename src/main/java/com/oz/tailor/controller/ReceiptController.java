@@ -1,10 +1,14 @@
 package com.oz.tailor.controller;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.common.reflect.TypeToken;
 import com.oz.tailor.DTO.ReceiptDTO;
 import com.oz.tailor.controller.utils.UserController;
 import com.oz.tailor.model.Customer;
@@ -35,15 +40,23 @@ public class ReceiptController {
 	
 	@Autowired
 	UserController userController;
+	
+	@Autowired
+	ModelMapper modelMapper;
 
 	@GetMapping("/listReceipts")
-	public ResponseEntity<List<Receipt>> listReceipts(HttpServletRequest request, HttpServletResponse response) {
+	public ResponseEntity<List<ReceiptDTO>> listReceipts(HttpServletRequest request, HttpServletResponse response) {
 		List<Receipt> receipts = (List<Receipt>) receiptRepository.findAllByUserId(userController.getAuthUser().getId());
+		Type listType = new TypeToken<List<ReceiptDTO>>() {}.getType();
+		List<ReceiptDTO> receiptDTOs = modelMapper.map(receipts, listType);
+		receiptDTOs.forEach(x -> x.setCustomerDebt(userDebt(x.getCustomer().getId())));
+		
+	
 		if (receipts.isEmpty()) {
 			return new ResponseEntity(HttpStatus.NO_CONTENT);
 			// You many decide to return HttpStatus.NOT_FOUND
 		}
-		return new ResponseEntity<List<Receipt>>(receipts, HttpStatus.OK);
+		return new ResponseEntity<List<ReceiptDTO>>(receiptDTOs, HttpStatus.OK);
 	}
 
 	@GetMapping("/getReceipt/{id}")
@@ -64,24 +77,25 @@ public class ReceiptController {
 
 		if (receiptDTO.getCustomerId() > 0)
 			receipt.setCustomer(customerRepository.findById(receiptDTO.getCustomerId()).get());
+		
+		receipt.setUser(userController.getAuthUser());
 
 		Receipt b = receiptRepository.save(receipt);
 
 		return new ResponseEntity<String>("{\"result\":" + b.getId() + "}", HttpStatus.CREATED);
 	}
 	
-	@GetMapping("/getUserDebt/{userId}")
-	public ResponseEntity<?> userDebt(@PathVariable("userId") long userId) {
+	public double userDebt(long userId) {
 
 		Customer customer = customerRepository.findById(userId).get();
 		if (customer == null) {
 
-			return new ResponseEntity<String>("{\"result\":\"Kayıt Bulunamadı\"}", HttpStatus.NOT_FOUND);
+			return 0;
 		}
 		double sumBaskets = customer.getBaskets().stream().mapToDouble(n-> n.getAmount()).sum();
 		double sumReceipts = customer.getReceipts().stream().mapToDouble(n-> n.getReceiptAmount()).sum();
 		double totalDebt = sumBaskets-sumReceipts;
-		return new ResponseEntity<String>("{\"result\":\""+totalDebt+"\"}", HttpStatus.CREATED);
+		return totalDebt;
 	}
 
 	// ------------------- Delete a User-----------------------------------------

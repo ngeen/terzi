@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.oz.tailor.DTO.YelekDTO;
+import com.oz.tailor.controller.utils.UserController;
 import com.oz.tailor.model.Yelek;
 import com.oz.tailor.repository.BasketRepository;
 import com.oz.tailor.repository.DressModelRepository;
@@ -30,6 +31,9 @@ public class WaistController {
 	@Autowired
 	ItemRepository itemRepository;
 	
+	@Autowired
+	UserController userController;
+	
 	@PostMapping("/saveWaist")
     public ResponseEntity<?> createUser(@RequestBody YelekDTO yelekDTO) {
 		Yelek yelek = new Yelek();
@@ -40,6 +44,7 @@ public class WaistController {
 		yelek.setDressModel(dressModelRepository.findById(yelekDTO.getDressModelId()).get());
 		yelek.setBasket(basketRepository.findById(yelekDTO.getBasketId()).get());
 		
+		yelek.setUser(userController.getAuthUser());
 		waistRepository.save(yelek);
  
         return new ResponseEntity<String>("{\"result\":\"success\"}", HttpStatus.CREATED);

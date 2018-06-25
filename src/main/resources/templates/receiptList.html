@@ -64,10 +64,7 @@
 		        "columns": [
 		            { "data": "customer.customerName" },
 		            { "data": "receiptAmount" },
-		            { "data" : function ( row) {
-		            	console.log(debt(row["customer"]["id"]));
-		                  return "";
-		                } },
+		            { "data" : "customerDebt"},
 		            { 
 		            	"data": null,
 		                "defaultContent": "<div class=\"btn-group\"><button id=\"updateBtn\" class=\"btn btn-warning\">Düzenle</button></div>"

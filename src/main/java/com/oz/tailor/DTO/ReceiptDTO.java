@@ -1,5 +1,7 @@
 package com.oz.tailor.DTO;
 
+import com.oz.tailor.model.Customer;
+
 public class ReceiptDTO {
 	private long id;
 	
@@ -8,6 +10,10 @@ public class ReceiptDTO {
 	private long receiptTypeId;
 	
 	private long customerId;
+	
+	private double customerDebt;
+	
+	private Customer customer;
 
 	public long getId() {
 		return id;
@@ -39,5 +45,21 @@ public class ReceiptDTO {
 
 	public void setCustomerId(long customerId) {
 		this.customerId = customerId;
+	}
+
+	public Customer getCustomer() {
+		return customer;
+	}
+
+	public void setCustomer(Customer customer) {
+		this.customer = customer;
+	}
+
+	public double getCustomerDebt() {
+		return customerDebt;
+	}
+
+	public void setCustomerDebt(double customerDebt) {
+		this.customerDebt = customerDebt;
 	}
 }

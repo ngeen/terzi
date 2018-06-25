@@ -45,14 +45,26 @@
 				<!-- /.card-body -->
 				<div th:if="${receipt.id > 0}">
 					<div>
-						<label><h1 th:text="${customer}"></h1></label>
+						<div class="row">
+							<div class="col-6">
+								<h1 th:text="${customer}"></h1>
+							</div>
+							<div class="col-6">
+								<h2 class="text-right">
+									Toplam Borç Tutarı <span class="badge badge-secondary"
+										th:text="${receipt.customerDebt}"></span>
+								</h2>
+							</div>
+						</div>
+						<input type="hidden" id="customerId" name="customerId"
+							th:field="*{customerId}">
 					</div>
 
 					<div class="form-group">
 						<label>Tahsilat Türü</label> <select class="form-control select2"
 							style="width: 100%;" id="receiptTypeId" name="receiptTypeId">
-							<option th:each="_receiptType: ${receiptTypes}" th:text="${_receiptType.name}"
-								th:value="${_receiptType.id}" />
+							<option th:each="_receiptType: ${receiptTypes}"
+								th:text="${_receiptType.name}" th:value="${_receiptType.id}" />
 						</select>
 					</div>
 
@@ -79,15 +91,15 @@
 		<script th:src="@{/plugins/input-mask/jquery.inputmask.extensions.js}"></script>
 		<!-- page script -->
 		<script>
-			$(document)
-					.ready(
-							function() {
-								//Initialize Select2 Elements
-								$('.select2').select2();
-								$('#fittingDate, #fittingDate2, #deliveryDate').inputmask('dd/mm/yyyy', {
+			$(document).ready(
+					function() {
+						//Initialize Select2 Elements
+						$('.select2').select2();
+						$('#fittingDate, #fittingDate2, #deliveryDate')
+								.inputmask('dd/mm/yyyy', {
 									'placeholder' : 'dd/mm/yyyy'
 								})
-							});
+					});
 
 			(function($) {
 				$.fn.serializeFormJSON = function() {
