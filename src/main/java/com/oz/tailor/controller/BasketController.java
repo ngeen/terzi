@@ -58,26 +58,30 @@ public class BasketController {
 
 	@PostMapping("/saveBasket")
 	public ResponseEntity<?> saveBasket(@RequestBody BasketDTO basketDTO) {
+		try {
+			Converter<BasketDTO, Basket> converter = context -> {
+				Basket entity = context.getDestination();
+				
+				if (context.getSource().getCustomerId() > 0)
+					entity.setCustomer(customerRepository.findById(context.getSource().getCustomerId()).get());
 
-		Converter<BasketDTO, Basket> converter = context -> {
-			Basket entity = context.getDestination();
+				if (context.getSource().getFabricId() > 0)
+					entity.setFabric(fabricRepository.findById(context.getSource().getFabricId()).get());
+
+				return entity;
+			};
+			modelMapper.createTypeMap(BasketDTO.class, Basket.class).setPostConverter(converter);
 			
-			if (context.getSource().getCustomerId() > 0)
-				entity.setCustomer(customerRepository.findById(context.getSource().getCustomerId()).get());
+			Basket basket = modelMapper.map(basketDTO, Basket.class);
+			basket.setUser(userController.getAuthUser());
 
-			if (context.getSource().getFabricId() > 0)
-				entity.setFabric(fabricRepository.findById(context.getSource().getFabricId()).get());
+			Basket b = basketRepository.save(basket);
 
-			return entity;
-		};
-		modelMapper.createTypeMap(BasketDTO.class, Basket.class).setPostConverter(converter);
-		
-		Basket basket = modelMapper.map(basketDTO, Basket.class);
-		basket.setUser(userController.getAuthUser());
+			return new ResponseEntity<String>("{\"result\":" + b.getId() + "}", HttpStatus.CREATED);
+		} catch (Exception e) {
+			return new ResponseEntity<String>("{\"result\": false, error: \"" +e.getStackTrace().toString()+"\"}", HttpStatus.CREATED);
+		}
 
-		Basket b = basketRepository.save(basket);
-
-		return new ResponseEntity<String>("{\"result\":" + b.getId() + "}", HttpStatus.CREATED);
 	}
 
 	// ------------------- Delete a User-----------------------------------------
