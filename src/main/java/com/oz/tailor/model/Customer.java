@@ -1,6 +1,7 @@
 package com.oz.tailor.model;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -11,6 +12,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.oz.tailor.util.JsonDateDeserializer;
 
 @Entity
 public class Customer implements Serializable {
@@ -23,6 +26,8 @@ public class Customer implements Serializable {
 	
 	private String customerName;
 	private String customerSurname;
+	@JsonDeserialize(using = JsonDateDeserializer.class)
+	private Date birthDay;
 	private String companyName;
 	private String phoneNumber;
 	private String mail;
@@ -112,6 +117,12 @@ public class Customer implements Serializable {
 	}
 	public void setUser(User user) {
 		this.user = user;
+	}
+	public Date getBirthDay() {
+		return birthDay;
+	}
+	public void setBirthDay(Date birthDay) {
+		this.birthDay = birthDay;
 	}
 
 }

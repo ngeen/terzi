@@ -133,7 +133,10 @@
 					data : JSON.stringify(data),
 					processData : false,
 					success : function(data, textStatus, jQxhr) {
-						window.location.href = '/receipt/' + data["result"];
+						if(data["result"] == "redirect")
+							window.location.href = '/receipts';
+						else 
+							window.location.href = '/receipt/' + data["result"];
 					},
 					error : function(jqXhr, textStatus, errorThrown) {
 						console.log(errorThrown);

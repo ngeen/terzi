@@ -69,6 +69,7 @@ public class ReceiptController {
 	public ResponseEntity<?> saveReceipt(@RequestBody ReceiptDTO receiptDTO) {
 
 		Receipt receipt = receiptRepository.findById(receiptDTO.getId()).orElse(new Receipt());
+		boolean redirect = (receipt.getId() == 0);
 
 		receipt.setReceiptAmount(receiptDTO.getReceiptAmount());
 
@@ -81,8 +82,9 @@ public class ReceiptController {
 		receipt.setUser(userController.getAuthUser());
 
 		Receipt b = receiptRepository.save(receipt);
-
-		return new ResponseEntity<String>("{\"result\":" + b.getId() + "}", HttpStatus.CREATED);
+		
+		String result = (!redirect) ? "redirect" : String.valueOf(b.getId()); 
+		return new ResponseEntity<String>("{\"result\": \"" + result + "\"}", HttpStatus.CREATED);
 	}
 	
 	public double userDebt(long userId) {
