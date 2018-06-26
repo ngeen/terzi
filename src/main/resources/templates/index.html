@@ -3,20 +3,98 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorator="layout">
 <head>
-<title>Hello world page</title>
+<title>Bugünün Siparişleri</title>
+<th:block loyout:fragment="header">
+	<!-- DataTables -->
+	<link rel="stylesheet"
+		href="/plugins/datatables/dataTables.bootstrap4.css">
+	<link rel="stylesheet" type="text/css"
+		href="/plugins/datatables/extensions/Responsive/css/dataTables.responsive.css">
+</th:block>
 </head>
 <body>
 
 	<th:block layout:fragment="page_header">
-		<li class="breadcrumb-item">Bugün Teslim Edilecek Siparişler</li>
+		Bugünün Siparişleri
 	</th:block>
 
 	<th:block layout:fragment="breadcrumb">
-		<li class="breadcrumb-item">Ana Menu</li>
+		<li class="breadcrumb-item">Bugünün Siparişleri</li>
 	</th:block>
-	
+
 	<div layout:fragment="page_content">
-		<h1>Bugün Teslim Edilecek Siparişler</h1>
+		<button class="btn btn-block btn-success btn-lg" onclick="window.location.href='/basket'">Yeni Sipariş</button> <br />
+		<table id="example"
+			class="table table-striped table-hover dt-responsive display"
+			cellspacing="0" width="100%">
+			<thead>
+				<tr>
+					<th>Müşteri</th>
+					<th>Tutar</th>
+					<th>İşlem</th>
+				</tr>
+			</thead>
+			<tfoot>
+				<tr>
+					<th>Müşteri</th>
+					<th>Tutar</th>
+					<th>İşlem</th>
+				</tr>
+			</tfoot>
+		</table>
 	</div>
+	<th:block layout:fragment="script">
+		<!-- DataTables -->
+		<script src="/plugins/datatables/jquery.dataTables.js"></script>
+		<script src="/plugins/datatables/dataTables.bootstrap4.js"></script>
+		<script type="text/javascript" language="javascript"
+			src="/plugins/datatables/extensions/Responsive/js/dataTables.responsive.js"></script>
+		<!-- page script -->
+		<script>
+
+		$(document).ready( function () {
+			var table = $('#example').DataTable( {
+				"searching": false,
+		        "ajax": {
+		            "url": "/listTodayBaskets",
+		            "dataSrc": ""
+		        },
+		        "columns": [
+		            { "data": "customer.customerName" },
+		            { "data": "amount" },
+		            { 
+		            	"data": null,
+		                "defaultContent": "<div class=\"btn-group\"><button id=\"updateBtn\" class=\"btn btn-warning\">Düzenle</button> <button id=\"deleteBtn\" class=\"btn btn-danger\">Sil</button></div>"
+		               }
+		        ]
+		        
+		    } );
+			
+			$('#example tbody').on( 'click', 'button', function () {
+		        var data = table.row( $(this).parents('tr') ).data();
+		        var id = data["id"];
+		        if($(this).attr('id') === "updateBtn"){
+		        	window.location.href='/basket/'+id;
+		        } else if ($(this).attr('id') === "deleteBtn"){
+		        	
+		        	$.ajax({
+						url : '/deleteBasket/'+id,
+						dataType : 'json',
+						type : 'GET',
+						contentType : 'application/json',
+						processData : false,
+						success : function(data, textStatus, jQxhr) {
+							window.location.href='/baskets';
+						},
+						error : function(jqXhr, textStatus, errorThrown) {
+							console.log(errorThrown);
+						}
+					});
+		        	
+		        }
+		    } );
+		});
+		</script>
+	</th:block>
 </body>
 </html>

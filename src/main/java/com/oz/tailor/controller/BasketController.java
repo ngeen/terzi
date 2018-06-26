@@ -1,13 +1,13 @@
 package com.oz.tailor.controller;
 
-import java.util.Arrays;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -41,10 +41,22 @@ public class BasketController {
 	
 	@Autowired
 	UserController userController;
+	
+	private static final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
 	@GetMapping("/listBaskets")
 	public ResponseEntity<List<Basket>> listBaskets(HttpServletRequest request, HttpServletResponse response) {
 		List<Basket> baskets = (List<Basket>) basketRepository.findAllByUserId(userController.getAuthUser().getId());
+		if (baskets.isEmpty()) {
+			return new ResponseEntity(HttpStatus.NO_CONTENT);
+			// You many decide to return HttpStatus.NOT_FOUND
+		}
+		return new ResponseEntity<List<Basket>>(baskets, HttpStatus.OK);
+	}
+	
+	@GetMapping("/listTodayBaskets")
+	public ResponseEntity<List<Basket>> listTodayBaskets(HttpServletRequest request, HttpServletResponse response) throws ParseException {
+		List<Basket> baskets = (List<Basket>) basketRepository.findAllByDeliveryDateAndUserId(new Date(), userController.getAuthUser().getId());
 		if (baskets.isEmpty()) {
 			return new ResponseEntity(HttpStatus.NO_CONTENT);
 			// You many decide to return HttpStatus.NOT_FOUND
