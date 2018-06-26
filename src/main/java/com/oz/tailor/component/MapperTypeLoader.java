@@ -35,9 +35,13 @@ public class MapperTypeLoader implements ApplicationRunner {
 			
 			if (context.getSource().getCustomerId() > 0)
 				entity.setCustomer(customerRepository.findById(context.getSource().getCustomerId()).get());
+			else
+				entity.setCustomer(null);
 
 			if (context.getSource().getFabricId() > 0)
 				entity.setFabric(fabricRepository.findById(context.getSource().getFabricId()).get());
+			else
+				entity.setFabric(null);
 
 			return entity;
 		};
