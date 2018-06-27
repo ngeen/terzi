@@ -82,21 +82,22 @@
 									class="nav-link"> <i class="fa fa-cube nav-icon"></i>
 										<p>Model İşlemleri</p>
 								</a></li>
-								<li class="nav-item"><a th:href="@{/fabrics}" class="nav-link">
-										<i class="nav-icon fa fa-flag-o"></i>
+								<li class="nav-item"><a th:href="@{/fabrics}"
+									class="nav-link"> <i class="nav-icon fa fa-flag-o"></i>
 										<p>Kumaş İşlemleri</p>
 								</a></li>
 							</ul></li>
-						<li class="nav-item"><a th:href="@{/baskets}" class="nav-link">
-								<i class="nav-icon fa fa-pencil-square-o"></i>
+						<li class="nav-item"><a th:href="@{/baskets}"
+							class="nav-link"> <i class="nav-icon fa fa-pencil-square-o"></i>
 								<p>Sipariş İşlemleri</p>
 						</a></li>
-						<li class="nav-item"><a th:href="@{/receipts}" class="nav-link">
-								<i class="nav-icon fa fa-credit-card"></i>
+						<li class="nav-item"><a th:href="@{/receipts}"
+							class="nav-link"> <i class="nav-icon fa fa-credit-card"></i>
 								<p>Tahsilat İşlemleri</p>
 						</a></li>
-						<li sec:authorize="hasRole('ROLE_ADMIN')" class="nav-item"><a th:href="@{/users}" class="nav-link">
-								<i class="nav-icon fa fa-credit-card"></i>
+						<li sec:authorize="hasRole('ROLE_ADMIN')" class="nav-item"><a
+							th:href="@{/users}" class="nav-link"> <i
+								class="nav-icon fa fa-credit-card"></i>
 								<p>Kullanıcı İşlemleri</p>
 						</a></li>
 
@@ -163,7 +164,9 @@
 	<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
 	<script>
 		$.widget.bridge('uibutton', $.ui.button)
-		var baseUrl = ('https:' == document.location.protocol ? 'https' : 'http') + "://" + window.location.host + "/"
+		var baseUrl = ('https:' == document.location.protocol ? 'https'
+				: 'http')
+				+ "://" + window.location.host + "/"
 	</script>
 	<!-- Bootstrap 4 -->
 	<script th:src="@{/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
@@ -178,6 +181,20 @@
 	<script th:src="@{/dist/js/demo.js}"></script>
 
 	<th:block layout:fragment="script"></th:block>
+
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async
+		src="https://www.googletagmanager.com/gtag/js?id=UA-121427416-1"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag() {
+			dataLayer.push(arguments);
+		}
+		gtag('js', new Date());
+
+		gtag('config', 'UA-121427416-1');
+	</script>
+
 
 </body>
 </html>
