@@ -7,5 +7,5 @@ import com.oz.tailor.model.Ceket;
 
 @Repository
 public interface JacketRepository  extends CrudRepository<Ceket, Long> {
-
+	Ceket	findByCustomerId(long customerId);
 }

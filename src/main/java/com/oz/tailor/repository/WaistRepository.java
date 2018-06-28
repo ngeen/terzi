@@ -7,5 +7,5 @@ import com.oz.tailor.model.Yelek;
 
 @Repository
 public interface WaistRepository extends CrudRepository<Yelek, Long> {
-
+	Yelek	findByCustomerId(long customerId);
 }

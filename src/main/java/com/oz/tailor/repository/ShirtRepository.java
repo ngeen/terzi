@@ -7,5 +7,5 @@ import com.oz.tailor.model.Gomlek;
 
 @Repository
 public interface ShirtRepository extends CrudRepository<Gomlek, Long> {
-
+	Gomlek	findByCustomerId(long customerId);
 }

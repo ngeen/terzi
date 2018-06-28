@@ -23,6 +23,9 @@ public abstract class Item {
 	
 	@ManyToOne
 	private User user;
+	
+	@ManyToOne
+	private Customer customer;
 
 	public Long getId() {
 		return id;
@@ -54,5 +57,13 @@ public abstract class Item {
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	public Customer getCustomer() {
+		return customer;
+	}
+
+	public void setCustomer(Customer customer) {
+		this.customer = customer;
 	}
 }

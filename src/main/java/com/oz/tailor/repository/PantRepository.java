@@ -7,5 +7,5 @@ import com.oz.tailor.model.Pantolon;
 
 @Repository
 public interface PantRepository extends CrudRepository<Pantolon, Long> {
-
+	Pantolon	findByCustomerId(long customerId);
 }

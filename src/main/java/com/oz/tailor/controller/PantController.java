@@ -13,6 +13,7 @@ import com.oz.tailor.DTO.PantolonDTO;
 import com.oz.tailor.controller.utils.UserController;
 import com.oz.tailor.model.Pantolon;
 import com.oz.tailor.repository.BasketRepository;
+import com.oz.tailor.repository.CustomerRepository;
 import com.oz.tailor.repository.DressModelRepository;
 import com.oz.tailor.repository.ItemRepository;
 import com.oz.tailor.repository.PantRepository;
@@ -32,6 +33,9 @@ public class PantController {
 	ItemRepository itemRepository;
 	
 	@Autowired
+	CustomerRepository customerRepository;
+	
+	@Autowired
 	UserController userController;
 	
 	@PostMapping("/savePant")
@@ -46,6 +50,7 @@ public class PantController {
 		pantolon.setDressModel(dressModelRepository.findById(pantolonDTO.getDressModelId()).get());
 		pantolon.setBasket(basketRepository.findById(pantolonDTO.getBasketId()).get());
 		pantolon.setUser(userController.getAuthUser());
+		pantolon.setId(pantolonDTO.getId());
 		pantRepository.save(pantolon);
  
         return new ResponseEntity<String>("{\"result\":\"success\"}", HttpStatus.CREATED);
@@ -62,6 +67,23 @@ public class PantController {
         	return new ResponseEntity<String>("{\"result\":\"Kayıt Bulunamadı\"}", HttpStatus.NOT_FOUND);
         }
         pantRepository.deleteById(id);
+        return new ResponseEntity<String>("{\"result\":\"success\"}", HttpStatus.CREATED);
+    }
+	
+	@GetMapping("/pantForCustomer/{pantId}")
+    public ResponseEntity<?> pantForCustomer(@PathVariable("pantId") long pantId) {
+		
+        Pantolon tempPantolon = pantRepository.findById(pantId).get();
+        long customerId = tempPantolon.getBasket().getCustomer().getId();
+        Pantolon realPantolon = pantRepository.findByCustomerId(customerId);
+        if (realPantolon != null) {
+        	realPantolon.setCustomer(null);
+        	pantRepository.save(realPantolon);
+        }
+        
+
+        tempPantolon.setCustomer(customerRepository.findById(customerId).get());
+        pantRepository.save(tempPantolon);
         return new ResponseEntity<String>("{\"result\":\"success\"}", HttpStatus.CREATED);
     }
 }

@@ -12,10 +12,12 @@ import com.oz.tailor.DTO.GomlekDTO;
 import com.oz.tailor.DTO.PantolonDTO;
 import com.oz.tailor.DTO.YelekDTO;
 import com.oz.tailor.controller.utils.UserController;
+import com.oz.tailor.model.Basket;
 import com.oz.tailor.model.Ceket;
 import com.oz.tailor.model.Gomlek;
 import com.oz.tailor.model.Pantolon;
 import com.oz.tailor.model.Yelek;
+import com.oz.tailor.repository.BasketRepository;
 import com.oz.tailor.repository.DressModelRepository;
 import com.oz.tailor.repository.JacketRepository;
 import com.oz.tailor.repository.PantRepository;
@@ -41,6 +43,9 @@ public class ItemController {
 	JacketRepository jacketRepository;
 	
 	@Autowired
+	BasketRepository basketRepository;
+	
+	@Autowired
 	UserController userController;
 	
 	@Autowired
@@ -49,8 +54,14 @@ public class ItemController {
 	
 	@GetMapping("/saveShirt/{basketId}")
 	public String addShirt(@PathVariable("basketId") long basketId, Model model) {
+		Basket basket = basketRepository.findById(basketId).get();
+		GomlekDTO gomlekDTO = new GomlekDTO();
+		Gomlek gomlek = shirtRepository.findByCustomerId(basket.getCustomer().getId());
+		if(gomlek != null) {
+			gomlekDTO = modelMapper.map(gomlek, GomlekDTO.class);
+		}
 		model.addAttribute("basketId", basketId);
-		model.addAttribute("shirt",new GomlekDTO());
+		model.addAttribute("shirt", gomlekDTO);
 		model.addAttribute("dressModel", dressModelRepository.findAllByUserId(userController.getAuthUser().getId()));
 		return "shirt";
 	}
@@ -58,7 +69,7 @@ public class ItemController {
 	@GetMapping("/saveShirt/{basketId}/{shirtId}")
 	public String updateShirt(@PathVariable("basketId") long basketId, @PathVariable("shirtId") long shirtId, Model model) {
 		Gomlek gomlek = shirtRepository.findById(shirtId).get();
-		GomlekDTO gomlekDTO = modelMapper.map(Gomlek.class, GomlekDTO.class);
+		GomlekDTO gomlekDTO = modelMapper.map(gomlek, GomlekDTO.class);
 		/*GomlekDTO gomlekDTO = new GomlekDTO();
 		gomlekDTO.setBasen(gomlek.getBasen());
 		gomlekDTO.setBoy(gomlek.getBoy());
@@ -91,13 +102,14 @@ public class ItemController {
 	@GetMapping("/saveWaist/{basketId}/{waistId}")
 	public String updateWaist(@PathVariable("basketId") long basketId, @PathVariable("waistId") long waistId, Model model) {
 		Yelek yelek = waistRepository.findById(waistId).get();
-		YelekDTO yelekDTO = new YelekDTO();
+		YelekDTO yelekDTO = modelMapper.map(yelek, YelekDTO.class);
+		/*YelekDTO yelekDTO = new YelekDTO();
 		yelekDTO.setBoy(yelek.getBoy());
 		yelekDTO.setGobek(yelek.getGobek());
 		yelekDTO.setGogus(yelek.getGogus());
 		yelekDTO.setAyna(yelek.getAyna());
 		yelekDTO.setDressModelId(yelek.getDressModel().getId());
-		yelekDTO.setBasketId(yelek.getBasket().getId());
+		yelekDTO.setBasketId(yelek.getBasket().getId());*/
 		
 		model.addAttribute("basketId", basketId);
 		model.addAttribute("waist", yelekDTO);
@@ -116,7 +128,8 @@ public class ItemController {
 	@GetMapping("/savePant/{basketId}/{pantId}")
 	public String updatePant(@PathVariable("basketId") long basketId, @PathVariable("pantId") long pantId, Model model) {
 		Pantolon pantolon = pantRepository.findById(pantId).get();
-		PantolonDTO pantolonDTO = new PantolonDTO();
+		PantolonDTO pantolonDTO = modelMapper.map(pantolon, PantolonDTO.class);
+		/*PantolonDTO pantolonDTO = new PantolonDTO();
 		pantolonDTO.setAg(pantolon.getAg());
 		pantolonDTO.setBasen(pantolon.getBasen());
 		pantolonDTO.setBel(pantolon.getBel());
@@ -124,7 +137,7 @@ public class ItemController {
 		pantolonDTO.setKavala(pantolon.getKavala());
 		pantolonDTO.setPaca(pantolon.getPaca());
 		pantolonDTO.setDressModelId(pantolon.getDressModel().getId());
-		pantolonDTO.setBasketId(pantolon.getBasket().getId());
+		pantolonDTO.setBasketId(pantolon.getBasket().getId());*/
 		
 		model.addAttribute("basketId", basketId);
 		model.addAttribute("pant", pantolonDTO);
@@ -143,7 +156,8 @@ public class ItemController {
 	@GetMapping("/saveJacket/{basketId}/{jacketId}")
 	public String updateJacket(@PathVariable("basketId") long basketId, @PathVariable("jacketId") long jacketId, Model model) {
 		Ceket ceket = jacketRepository.findById(jacketId).get();
-		CeketDTO ceketDTO = new CeketDTO();
+		CeketDTO ceketDTO = modelMapper.map(ceket, CeketDTO.class);
+		/*CeketDTO ceketDTO = new CeketDTO();
 		ceketDTO.setBoy(ceket.getBoy());
 		ceketDTO.setGogus(ceket.getGogus());
 		ceketDTO.setIspala(ceket.getIspala());
@@ -152,7 +166,7 @@ public class ItemController {
 		ceketDTO.setKol(ceket.getKol());
 		ceketDTO.setBelOrtasi(ceket.getBelOrtasi());
 		ceketDTO.setDressModelId(ceket.getDressModel().getId());
-		ceketDTO.setBasketId(ceket.getBasket().getId());
+		ceketDTO.setBasketId(ceket.getBasket().getId());*/
 		
 		model.addAttribute("basketId", basketId);
 		model.addAttribute("jacket", ceketDTO);

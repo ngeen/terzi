@@ -77,6 +77,7 @@
 
 				<div class="card-footer">
 					<button type="submit" class="btn btn-primary">Kaydet</button>
+					<button type="button" th:if="${jacket.id > 0}" class="btn btn-success" onClick="saveForCustomer('/jacketForCustomer/','id')">Varsayılan Ölçü Yap</button>
 				</div>
 			</form>
 		</div>

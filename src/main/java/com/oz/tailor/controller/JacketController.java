@@ -13,6 +13,7 @@ import com.oz.tailor.DTO.CeketDTO;
 import com.oz.tailor.controller.utils.UserController;
 import com.oz.tailor.model.Ceket;
 import com.oz.tailor.repository.BasketRepository;
+import com.oz.tailor.repository.CustomerRepository;
 import com.oz.tailor.repository.DressModelRepository;
 import com.oz.tailor.repository.ItemRepository;
 import com.oz.tailor.repository.JacketRepository;
@@ -32,6 +33,9 @@ public class JacketController {
 	ItemRepository itemRepository;
 	
 	@Autowired
+	CustomerRepository customerRepository;
+	
+	@Autowired
 	UserController userController;
 	
 	@PostMapping("/saveJacket")
@@ -47,6 +51,7 @@ public class JacketController {
 		ceket.setDressModel(dressModelRepository.findById(ceketDTO.getDressModelId()).get());
 		ceket.setBasket(basketRepository.findById(ceketDTO.getBasketId()).get());
 		ceket.setUser(userController.getAuthUser());
+		ceket.setId(ceketDTO.getId());
 		jacketRepository.save(ceket);
  
         return new ResponseEntity<String>("{\"result\":\"success\"}", HttpStatus.CREATED);
@@ -63,6 +68,23 @@ public class JacketController {
         	return new ResponseEntity<String>("{\"result\":\"Kayıt Bulunamadı\"}", HttpStatus.NOT_FOUND);
         }
         jacketRepository.deleteById(id);
+        return new ResponseEntity<String>("{\"result\":\"success\"}", HttpStatus.CREATED);
+    }
+	
+	@GetMapping("/jacketForCustomer/{jacketId}")
+    public ResponseEntity<?> jacketForCustomer(@PathVariable("jacketId") long jacketId) {
+		
+        Ceket tempCeket = jacketRepository.findById(jacketId).get();
+        long customerId = tempCeket.getBasket().getCustomer().getId();
+        Ceket realCeket = jacketRepository.findByCustomerId(customerId);
+        if (realCeket != null) {
+        	realCeket.setCustomer(null);
+        	jacketRepository.save(realCeket);
+        }
+        
+
+        tempCeket.setCustomer(customerRepository.findById(customerId).get());
+        jacketRepository.save(tempCeket);
         return new ResponseEntity<String>("{\"result\":\"success\"}", HttpStatus.CREATED);
     }
 }

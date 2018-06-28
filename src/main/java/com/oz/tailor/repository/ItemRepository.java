@@ -10,4 +10,5 @@ import com.oz.tailor.model.Item;
 @Repository
 public interface ItemRepository  extends CrudRepository<Item, Long> {
 	List<Item> findAllByBasketId(long basketId);
+	Item	findByCustomerId(long customerId);
 }

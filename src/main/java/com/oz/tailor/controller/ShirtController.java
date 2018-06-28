@@ -3,9 +3,6 @@ package com.oz.tailor.controller;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +18,7 @@ import com.oz.tailor.controller.utils.UserController;
 import com.oz.tailor.model.Gomlek;
 import com.oz.tailor.model.Item;
 import com.oz.tailor.repository.BasketRepository;
+import com.oz.tailor.repository.CustomerRepository;
 import com.oz.tailor.repository.DressModelRepository;
 import com.oz.tailor.repository.ItemRepository;
 import com.oz.tailor.repository.ShirtRepository;
@@ -38,6 +36,9 @@ public class ShirtController {
 
 	@Autowired
 	ItemRepository itemRepository;
+	
+	@Autowired
+	CustomerRepository customerRepository;
 
 	@Autowired
 	UserController userController;
@@ -58,6 +59,7 @@ public class ShirtController {
 		gomlek.setYaka(gomlekDTO.getYaka());
 		gomlek.setDressModel(dressModelRepository.findById(gomlekDTO.getDressModelId()).get());
 		gomlek.setBasket(basketRepository.findById(gomlekDTO.getBasketId()).get());
+		gomlek.setId(gomlekDTO.getId());
 		
 		
 		gomlek.setUser(userController.getAuthUser());
@@ -97,4 +99,21 @@ public class ShirtController {
 		}
 		return new ResponseEntity<List<ItemDTO>>(items, HttpStatus.OK);
 	}
+	
+	@GetMapping("/shirtForCustomer/{shirtId}")
+    public ResponseEntity<?> shirtForCustomer(@PathVariable("shirtId") long shirtId) {
+		
+        Gomlek tempGomlek = shirtRepository.findById(shirtId).get();
+        long customerId = tempGomlek.getBasket().getCustomer().getId();
+        Gomlek realGomlek = shirtRepository.findByCustomerId(customerId);
+        if (realGomlek != null) {
+        	realGomlek.setCustomer(null);
+        	shirtRepository.save(realGomlek);
+        }
+        
+
+        tempGomlek.setCustomer(customerRepository.findById(customerId).get());
+        shirtRepository.save(tempGomlek);
+        return new ResponseEntity<String>("{\"result\":\"success\"}", HttpStatus.CREATED);
+    }
 }

@@ -163,7 +163,23 @@
 	<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
 	<script>
 		$.widget.bridge('uibutton', $.ui.button)
-		var baseUrl = ('https:' == document.location.protocol ? 'https' : 'http') + "://" + window.location.host + "/"
+		var baseUrl = ('https:' == document.location.protocol ? 'https' : 'http') + "://" + window.location.host + "/";
+		
+		var saveForCustomer = (link,elem) => {
+			console.log(link+$("#"+elem).val());
+			$.ajax({
+				url : link+$("#"+elem).val(),
+				dataType : 'json',
+				type : 'get',
+				contentType : 'application/json',
+				success : function(data, textStatus, jQxhr) {
+					alert(data.result);
+				},
+				error : function(jqXhr, textStatus, errorThrown) {
+					console.log(errorThrown);
+				}
+			});
+		};
 	</script>
 	<!-- Bootstrap 4 -->
 	<script th:src="@{/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
