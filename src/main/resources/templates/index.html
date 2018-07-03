@@ -23,7 +23,23 @@
 	</th:block>
 
 	<div layout:fragment="page_content">
-		<button class="btn btn-block btn-success btn-lg" onclick="window.location.href='/basket'">Yeni Sipariş</button> <br />
+		<div class="card card-primary">
+			<div class="card-header">
+				<h3 class="card-title">Hızlı İşlemler</h3>
+			</div>
+			<div class="card-body text-center">
+				<a class="btn btn-app" href="/customer"> <i class="fa fa-users"></i>
+					Yeni Müşteri
+				</a> <a class="btn btn-app" href="/dressModel"> <i
+					class="fa fa-cube"></i> Yeni Model
+				</a> <a class="btn btn-app" href="/fabric"> <i class="fa fa-flag"></i>
+					Yeni Kumaş
+				</a> <a class="btn btn-app" href="/basket"> <i
+					class="fa fa-pencil-square-o"></i> Yeni Sipariş
+				</a>
+			</div>
+			<!-- /.card-body -->
+		</div>
 		<table id="example"
 			class="table table-striped table-hover dt-responsive display"
 			cellspacing="0" width="100%">
@@ -51,49 +67,73 @@
 			src="/plugins/datatables/extensions/Responsive/js/dataTables.responsive.js"></script>
 		<!-- page script -->
 		<script>
+			$(document)
+					.ready(
+							function() {
+								var table = $('#example')
+										.DataTable(
+												{
+													"searching" : false,
+													"ajax" : {
+														"url" : "/listTodayBaskets",
+														"dataSrc" : ""
+													},
+													"columns" : [
+															{
+																"data" : "customer.customerName"
+															},
+															{
+																"data" : "amount"
+															},
+															{
+																"data" : null,
+																"defaultContent" : "<div class=\"btn-group\"><button id=\"updateBtn\" class=\"btn btn-warning\">Düzenle</button> <button id=\"deleteBtn\" class=\"btn btn-danger\">Sil</button></div>"
+															} ]
 
-		$(document).ready( function () {
-			var table = $('#example').DataTable( {
-				"searching": false,
-		        "ajax": {
-		            "url": "/listTodayBaskets",
-		            "dataSrc": ""
-		        },
-		        "columns": [
-		            { "data": "customer.customerName" },
-		            { "data": "amount" },
-		            { 
-		            	"data": null,
-		                "defaultContent": "<div class=\"btn-group\"><button id=\"updateBtn\" class=\"btn btn-warning\">Düzenle</button> <button id=\"deleteBtn\" class=\"btn btn-danger\">Sil</button></div>"
-		               }
-		        ]
-		        
-		    } );
-			
-			$('#example tbody').on( 'click', 'button', function () {
-		        var data = table.row( $(this).parents('tr') ).data();
-		        var id = data["id"];
-		        if($(this).attr('id') === "updateBtn"){
-		        	window.location.href='/basket/'+id;
-		        } else if ($(this).attr('id') === "deleteBtn"){
-		        	
-		        	$.ajax({
-						url : '/deleteBasket/'+id,
-						dataType : 'json',
-						type : 'GET',
-						contentType : 'application/json',
-						processData : false,
-						success : function(data, textStatus, jQxhr) {
-							window.location.href='/baskets';
-						},
-						error : function(jqXhr, textStatus, errorThrown) {
-							console.log(errorThrown);
-						}
-					});
-		        	
-		        }
-		    } );
-		});
+												});
+
+								$('#example tbody')
+										.on(
+												'click',
+												'button',
+												function() {
+													var data = table.row(
+															$(this).parents(
+																	'tr'))
+															.data();
+													var id = data["id"];
+													if ($(this).attr('id') === "updateBtn") {
+														window.location.href = '/basket/'
+																+ id;
+													} else if ($(this).attr(
+															'id') === "deleteBtn") {
+
+														$
+																.ajax({
+																	url : '/deleteBasket/'
+																			+ id,
+																	dataType : 'json',
+																	type : 'GET',
+																	contentType : 'application/json',
+																	processData : false,
+																	success : function(
+																			data,
+																			textStatus,
+																			jQxhr) {
+																		window.location.href = '/baskets';
+																	},
+																	error : function(
+																			jqXhr,
+																			textStatus,
+																			errorThrown) {
+																		console
+																				.log(errorThrown);
+																	}
+																});
+
+													}
+												});
+							});
 		</script>
 	</th:block>
 </body>
