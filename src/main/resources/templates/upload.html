@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout">
+<head>
+<title>Photo Upload</title>
+</head>
+<body>
+
+	<th:block layout:fragment="page_header">
+		Photo Upload
+	</th:block>
+
+	<th:block layout:fragment="breadcrumb">
+		<li class="breadcrumb-item">Photo Upload</li>
+	</th:block>
+
+	<div layout:fragment="page_content">
+		<form method="POST" action="/upload" enctype="multipart/form-data">
+			<div class="alert alert-info alert-dismissible" th:if="${message}">
+				<button type="button" class="close" data-dismiss="alert"
+					aria-hidden="true">×</button>
+				<p th:text="${message}">Follow the steps to continue to payment.</p>
+			</div>
+			<div class="form-group">
+				<label for="exampleInputFile">Resim Dosyası</label>
+				<div class="input-group">
+					<div class="custom-file">
+						<input type="file" class="custom-file-input" id="file" name="file">
+						<label class="custom-file-label" for="file">Dosya Seçiniz</label>
+					</div>
+					<div class="input-group-append">
+						<input class="input-group-text" type="submit" value="Gönder" />
+					</div>
+				</div>
+			</div>
+
+		</form>
+	</div>
+</body>
+</html>

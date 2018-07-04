@@ -21,6 +21,8 @@ public class User implements Serializable {
 
 	private String[] roles;
 	
+	private String imageName;
+	
 	public User() {}
 	
 	public User(String username, String password, String... roles) {
@@ -59,5 +61,13 @@ public class User implements Serializable {
 
 	public void setId(long id) {
 		this.id = id;
+	}
+
+	public String getImageName() {
+		return imageName;
+	}
+
+	public void setImageName(String imageName) {
+		this.imageName = imageName;
 	}
 }
