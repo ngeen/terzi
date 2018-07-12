@@ -46,16 +46,18 @@ public class UploadController {
         }
 
         try {
-
+        	User user = userController.getAuthUser();
+        	
+            if(user.getImageName() != null)
+            	try {
+            		Files.delete(Paths.get(imagePath + user.getImageName()));	
+				} catch (Exception e) {  }
+            	
+            
             // Get the file and save it somewhere
             byte[] bytes = file.getBytes();
             Path path = Paths.get(imagePath + file.getOriginalFilename());
             Files.write(path, bytes);
-            
-            User user = userController.getAuthUser();
-            
-            if(user.getImageName() != null)
-            	Files.delete(Paths.get(imagePath + user.getImageName()));
 
             user.setImageName(file.getOriginalFilename());
             

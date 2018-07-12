@@ -16,7 +16,7 @@
 <link rel="stylesheet"
 	href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
 <!-- Theme style -->
-<link rel="stylesheet" th:href="@{/dist/css/adminlte.min.css}">
+<link rel="stylesheet" th:href="@{/dist/css/adminlte.css}">
 <!-- Google Font: Source Sans Pro -->
 <link
 	href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700"
@@ -52,12 +52,18 @@
 		<!-- Main Sidebar Container -->
 		<aside class="main-sidebar sidebar-dark-primary elevation-4">
 			<!-- Brand Logo -->
-			<a href="/" class="brand-link"> <img
+			<a href="/" class="logo text-center">
+		      <!-- mini logo for sidebar mini 50x50 pixels -->
+		      <span class="logo-mini"><img
 				th:src="${@userServiceImpl.getAuthUser().getImageName() == null} ? @{/dist/img/AdminLTELogo.png} : ${'/img/'+@userServiceImpl.getAuthUser().getImageName()}"
-				alt="Terzi" class="brand-image img-circle elevation-3"
-				style="opacity: .8"> <span
-				class="brand-text font-weight-light">Terzi v1.0</span>
-			</a>
+				alt="Terzi" class="img-rounded elevation-3"
+				style="opacity: .8; height:50px;"></span>
+		      <!-- logo for regular state and mobile devices -->
+		      <span class="logo-lg"><img
+				th:src="${@userServiceImpl.getAuthUser().getImageName() == null} ? @{/dist/img/AdminLTELogo.png} : ${'/img/'+@userServiceImpl.getAuthUser().getImageName()}"
+				alt="Terzi" class="img-rounded elevation-3"
+				style="opacity: .8; height:150px;"></span>
+		    </a>
 
 			<!-- Sidebar -->
 			<div class="sidebar">

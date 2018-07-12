@@ -511,6 +511,13 @@ mark,
   color: #6c757d;
 }
 
+.logo .logo-lg {
+  display: block;
+}
+.logo .logo-mini {
+  display: none;
+}
+
 code,
 kbd,
 pre,
@@ -10161,6 +10168,18 @@ body,
   }
   .sidebar-mini.sidebar-collapse .visible-sidebar-mini {
     display: block !important;
+  }
+  .sidebar-mini.sidebar-collapse .logo {
+    width: 50px;
+  }
+  .sidebar-mini.sidebar-collapse .logo > .logo-mini {
+    display: block;
+    margin-left: -15px;
+    margin-right: -15px;
+    font-size: 18px;
+  }
+  .sidebar-mini.sidebar-collapse .logo > .logo-lg {
+    display: none;
   }
 }
 
