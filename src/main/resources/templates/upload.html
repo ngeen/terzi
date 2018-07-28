@@ -16,7 +16,7 @@
 	</th:block>
 
 	<div layout:fragment="page_content">
-		<form method="POST" action="/upload" enctype="multipart/form-data">
+        <form method="POST" enctype="multipart/form-data">
 			<div class="alert alert-info alert-dismissible" th:if="${message}">
 				<button type="button" class="close" data-dismiss="alert"
 					aria-hidden="true">×</button>
@@ -30,33 +30,47 @@
 						<label class="custom-file-label" for="file">Dosya Seçiniz</label>
 					</div>
 					<div class="input-group-append">
-						<input class="input-group-text" type="submit" value="Gönder" />
+                        <input class="input-group-text" type="submit" value="Gönder" formaction="/upload"/>
 					</div>
 				</div>
 			</div>
 
 		</form>
-		
-				<form method="POST" action="/changePass" enctype="multipart/form-data">
-			<div class="alert alert-info alert-dismissible" th:if="${message}">
-				<button type="button" class="close" data-dismiss="alert"
-					aria-hidden="true">×</button>
-				<p th:text="${message}">Follow the steps to continue to payment.</p>
-			</div>
-			<div class="form-group">
-				<label for="exampleInputFile">Yeni Şifreniz</label>
-				<div class="input-group">
-					<div class="custom-file">
-						<input type="input" class="custom-file-input" id="pass" name="pass">
-						<label class="custom-file-label" for="pass">Yeni Şifrenizi Giriniz</label>
-					</div>
-					<div class="input-group-append">
-						<input class="input-group-text" type="submit" value="Gönder" />
-					</div>
-				</div>
-			</div>
 
-		</form>
+        <form method="POST">
+            <div class="alert alert-info alert-dismissible" th:if="${message}">
+                <button type="button" class="close" data-dismiss="alert"
+                        aria-hidden="true">×
+                </button>
+                <p th:text="${message}">Follow the steps to continue to payment.</p>
+            </div>
+            <div class="form-group">
+                <label for="password">Yeni Şifre Giriniz</label>
+                <input type="text" class="form-control" id="password" name="password" placeholder="Yeni Şifre">
+            </div>
+            <button type="button" class="btn btn-primary" onclick="changePassword()">Submit</button>
+        </form>
 	</div>
+    <th:block layout:fragment="script">
+        <!-- page script -->
+        <script>
+            var changePassword = function () {
+                $.ajax({
+                    url: '/changePass',
+                    dataType: 'json',
+                    type: 'post',
+                    contentType: 'application/json',
+                    data: JSON.stringify({"password": $("#password").val()}),
+                    processData: false,
+                    success: function (data, textStatus, jQxhr) {
+                        alert(data["result"]);
+                    },
+                    error: function (jqXhr, textStatus, errorThrown) {
+                        console.log(errorThrown);
+                    }
+                });
+            }
+        </script>
+    </th:block>
 </body>
 </html>
