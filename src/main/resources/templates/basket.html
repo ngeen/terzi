@@ -12,6 +12,16 @@
 		href="/plugins/datatables/dataTables.bootstrap4.css">
 	<link rel="stylesheet" type="text/css"
 		href="/plugins/datatables/extensions/Responsive/css/dataTables.responsive.css">
+		
+	<style>
+		td.details-control {
+		    background: url('/dist/img/details_open.png') no-repeat center center;
+		    cursor: pointer;
+		}
+		tr.details td.details-control {
+		    background: url('/dist/img/details_close.png') no-repeat center center;
+		}
+	</style>
 </th:block>
 </head>
 <body>
@@ -72,12 +82,14 @@
 						cellspacing="0" width="100%">
 						<thead>
 							<tr>
+								<th></th>
 								<th>Sepet</th>
 								<th>İşlem</th>
 							</tr>
 						</thead>
 						<tfoot>
 							<tr>
+								<th></th>
 								<th>Sepet</th>
 								<th>İşlem</th>
 							</tr>
@@ -176,6 +188,12 @@
 														"dataSrc" : ""
 													},
 													"columns" : [
+														{
+											                "class":          "details-control",
+											                "orderable":      false,
+											                "data":           null,
+											                "defaultContent": ""
+											            },
 															{
 																"data" : "itemType"
 															},
@@ -185,6 +203,39 @@
 															} ]
 
 												});
+								
+							    $('#example tbody').on( 'click', 'tr td.details-control', function () {
+							        var tr = $(this).closest('tr');
+							        var row = table.row( tr );
+							        var idx = $(this).attr('id');
+							 
+							        if ( row.child.isShown() ) {
+							            tr.removeClass( 'details' );
+							            row.child.hide();
+							 
+							            // Remove from the 'open' array
+							            //detailRows.splice( idx, 1 );
+							        }
+							        else {
+							            tr.addClass( 'details' );
+							            
+							            $.ajax({
+											url : '/getItemDetail/' + row.data().id,
+											type : 'Get',
+											success : function(data, textStatus, jQxhr) {
+												row.child( data ).show();
+											},
+											error : function(jqXhr, textStatus, errorThrown) {
+												console.log(errorThrown);
+											}
+										}); 
+							 
+							            // Add to the 'open' array
+							            //if ( idx === -1 ) {
+							                //detailRows.push( tr.attr('id') );
+							            //}
+							        }
+							    } );
 
 								$('#example tbody')
 										.on(

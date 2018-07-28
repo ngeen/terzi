@@ -15,8 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.oz.tailor.DTO.GomlekDTO;
 import com.oz.tailor.DTO.ItemDTO;
 import com.oz.tailor.controller.utils.UserController;
+import com.oz.tailor.model.Ceket;
 import com.oz.tailor.model.Gomlek;
 import com.oz.tailor.model.Item;
+import com.oz.tailor.model.Pantolon;
+import com.oz.tailor.model.Yelek;
 import com.oz.tailor.repository.BasketRepository;
 import com.oz.tailor.repository.CustomerRepository;
 import com.oz.tailor.repository.DressModelRepository;
@@ -98,6 +101,65 @@ public class ShirtController {
 			// You many decide to return HttpStatus.NOT_FOUND
 		}
 		return new ResponseEntity<List<ItemDTO>>(items, HttpStatus.OK);
+	}
+	
+	@GetMapping("/getItemDetail/{itemId}")
+	public ResponseEntity<String> getItemDetails(@PathVariable("itemId") long itemId) {
+		Item item = itemRepository.findById(itemId).get();
+		if(item == null) {
+			return new ResponseEntity(HttpStatus.NO_CONTENT);
+		}
+		
+		StringBuilder sb = new StringBuilder();
+		switch (item.getClass().getSimpleName()) {
+		case "Gomlek":
+			Gomlek gomlek = (Gomlek)item;
+			sb.append("Basen : "+gomlek.getBasen());
+			sb.append(" Boy : "+gomlek.getBoy());
+			sb.append(" Göbek : "+gomlek.getGobek());
+			sb.append(" Göğüs : "+gomlek.getGogus());
+			sb.append(" İspala : "+gomlek.getIspala());
+			sb.append(" Kol Boyu : "+gomlek.getKolBoyu());
+			sb.append(" Manşet : "+gomlek.getManset());
+			sb.append(" Nakış : "+gomlek.getNakis());
+			sb.append(" Pazu : "+gomlek.getPazu());
+			sb.append(" Roba : "+gomlek.getRoba());
+			sb.append(" Yaka : "+gomlek.getYaka());
+			break;
+		case "Yelek":
+			Yelek yelek = (Yelek)item;
+			sb.append("Ayna : "+yelek.getAyna());
+			sb.append(" Boy : "+yelek.getBoy());
+			sb.append(" Göbek : "+yelek.getGobek());
+			sb.append(" Göğüs : "+yelek.getGogus());
+			
+			break;
+		case "Ceket":
+			Ceket ceket = (Ceket)item;
+			sb.append("Ayna : " + ceket.getAyna());
+			sb.append(" Bel Ortası : " + ceket.getBelOrtasi());
+			sb.append(" Boy : " + ceket.getBoy());
+			sb.append(" Göğüs : " + ceket.getGogus());
+			sb.append(" İspala : " + ceket.getIspala());
+			sb.append(" Kol : " + ceket.getKol());
+			sb.append(" Pazu : " + ceket.getPazu());
+			
+			break;
+		case "Pantolon":
+			Pantolon pantolon = (Pantolon)item;
+			sb.append("Ağ : " + pantolon.getAg());
+			sb.append(" Basen : " + pantolon.getBasen());
+			sb.append(" Bel : " + pantolon.getBel());
+			sb.append(" Diz Genişliği : " + pantolon.getDizGenisligi());
+			sb.append(" Kavala : " + pantolon.getKavala());
+			sb.append(" Paça : " + pantolon.getPaca());
+			
+			break;
+		default:
+			break;
+		}
+		
+		return new ResponseEntity<String>(sb.toString(), HttpStatus.CREATED);
 	}
 	
 	@GetMapping("/shirtForCustomer/{shirtId}")
