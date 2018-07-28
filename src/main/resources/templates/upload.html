@@ -36,6 +36,27 @@
 			</div>
 
 		</form>
+		
+				<form method="POST" action="/changePass" enctype="multipart/form-data">
+			<div class="alert alert-info alert-dismissible" th:if="${message}">
+				<button type="button" class="close" data-dismiss="alert"
+					aria-hidden="true">×</button>
+				<p th:text="${message}">Follow the steps to continue to payment.</p>
+			</div>
+			<div class="form-group">
+				<label for="exampleInputFile">Yeni Şifreniz</label>
+				<div class="input-group">
+					<div class="custom-file">
+						<input type="input" class="custom-file-input" id="pass" name="pass">
+						<label class="custom-file-label" for="pass">Yeni Şifrenizi Giriniz</label>
+					</div>
+					<div class="input-group-append">
+						<input class="input-group-text" type="submit" value="Gönder" />
+					</div>
+				</div>
+			</div>
+
+		</form>
 	</div>
 </body>
 </html>

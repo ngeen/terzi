@@ -1,5 +1,9 @@
 package com.oz.tailor.controller.utils;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 
@@ -17,6 +21,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.oz.tailor.model.User;
 import com.oz.tailor.repository.UserRepository;
@@ -25,6 +32,9 @@ import com.oz.tailor.repository.UserRepository;
 public class UserController {
 	@Autowired
 	UserRepository userRepository;
+	
+	@Autowired
+	UserController userController;
 	
 	public User getAuthUser() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -55,6 +65,22 @@ public class UserController {
         userRepository.save(user);
  
         return new ResponseEntity<String>("{\"result\":\"success\"}", HttpStatus.CREATED);
+    }
+	
+    @PostMapping("/changePass")
+    public String singleFileUpload(@RequestBody String pass,RedirectAttributes redirectAttributes) throws IOException {
+
+        User user = userController.getAuthUser();
+		
+		BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+		user.setPassword(bCryptPasswordEncoder.encode(pass));
+		
+		userRepository.save(user);
+		
+		redirectAttributes.addFlashAttribute("message",
+		        "Profil Fotoğrafınız Başarıyla Güncellenmiştir");
+
+        return "redirect:/uploadImage";
     }
  
     // ------------------- Delete a User-----------------------------------------
